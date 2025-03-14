@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'utils/theme.dart';
-import 'screens/home_screen.dart';
+import 'utils/platform_utils.dart';
+import 'utils/startup_manager.dart';
+import 'utils/notification_utils.dart';
+import 'app.dart';
 
 void main() {
-  runApp(MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
 
-  // Enforcing full-screen mode
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-}
+  // Setup full-screen mode & hide Windows UI
+  PlatformUtils.setFullScreen();
+  PlatformUtils.disableCloseButton();
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  // Enable auto-start at Windows boot
+  StartupManager.enableAutoStart();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'DDFS Project',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      home: HomeScreen(),
-    );
-  }
+  // Initialize local notifications
+  NotificationUtils.initialize();
+
+  runApp(const DDFSApp());
 }

@@ -1,15 +1,31 @@
-class Device {
+class DeviceModel {
   final String id;
-  final String type;
   final String name;
+  final String type;
+  final String status;
 
-  Device({required this.id, required this.type, required this.name});
+  DeviceModel({
+    required this.id,
+    required this.name,
+    required this.type,
+    required this.status,
+  });
+
+  factory DeviceModel.fromJson(Map<String, dynamic> json) {
+    return DeviceModel(
+      id: json['id'],
+      name: json['name'],
+      type: json['type'],
+      status: json['status'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'type': type,
       'name': name,
+      'type': type,
+      'status': status,
     };
   }
 }

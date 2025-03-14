@@ -13,8 +13,9 @@ import 'remote_support_screen.dart';
 import 'schedule_appointment_screen.dart';
 import 'settings_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class Screen extends StatelessWidget {
+  const Screen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +162,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisCount: 5,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      children: List.generate(7, (index) => _buildGridItem(context, index)),
+                      children: List.generate(6, (index) => _buildGridItem(context, index)),
                     ),
                     SizedBox(height: 20),
                     Text(
@@ -269,16 +270,6 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ScheduleAppointmentScreen()),
-          );
-        },
-      },
-      {
-        'icon': Icons.settings,
-        'title': 'Settings',
-        'onPressed': () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SettingsScreen()),
           );
         },
       },

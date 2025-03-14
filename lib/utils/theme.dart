@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static ThemeData get lightTheme {
-    return ThemeData(
-      primarySwatch: Colors.blue,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      brightness: Brightness.light,
-    );
-  }
+  static final lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: Colors.blue,
+    scaffoldBackgroundColor: Colors.white,
+  );
 
-  static ThemeData get darkTheme {
-    return ThemeData(
-      primarySwatch: Colors.blue,
-      visualDensity: VisualDensity.adaptivePlatformDensity,
-      brightness: Brightness.dark,
-    );
-  }
+  static final darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Colors.blue,
+    scaffoldBackgroundColor: Colors.black,
+  );
 }
