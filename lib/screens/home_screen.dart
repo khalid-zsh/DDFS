@@ -1,3 +1,12 @@
+import 'package:ddfs/screens/Cloud%20Screen/cloud_screen.dart';
+import 'package:ddfs/screens/Devices%20Screen/devices_screen.dart';
+import 'package:ddfs/screens/Help%20Screen/help_screen.dart';
+import 'package:ddfs/screens/Info%20Screen/info_screen.dart';
+import 'package:ddfs/screens/Menu%20Screen/menu_screen.dart';
+import 'package:ddfs/screens/Message%20Screen/message_screen.dart';
+import 'package:ddfs/screens/Notifications%20Screen/notifications_screen.dart';
+import 'package:ddfs/screens/Profile%20Screen/profile_screen.dart';
+import 'package:ddfs/screens/Warning%20Screen/warning_screen.dart';
 import 'package:flutter/material.dart';
 import 'data_extraction_screen.dart';
 import 'remote_support_screen.dart';
@@ -29,30 +38,110 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Image.asset('assets/logo.png', height: 30),
+                    Image.asset('assets/Logo/logo.png', height: 30),
                     SizedBox(width: 20),
-                    Text('Menu', style: TextStyle(color: Colors.white)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MenuScreen()),
+                        );
+                      },
+                      child: Text('Menu', style: TextStyle(color: Colors.white)),
+                    ),
                     _divider(),
-                    Text('Devices', style: TextStyle(color: Colors.white)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DevicesScreen()),
+                        );
+                      },
+                      child: Text('Devices', style: TextStyle(color: Colors.white)),
+                    ),
                     _divider(),
-                    Text('Settings', style: TextStyle(color: Colors.white)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SettingsScreen()),
+                        );
+                      },
+                      child: Text('Settings', style: TextStyle(color: Colors.white)),
+                    ),
                     _divider(),
-                    Text('Help', style: TextStyle(color: Colors.white)),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HelpScreen()),
+                        );
+                      },
+                      child: Text('Help', style: TextStyle(color: Colors.white)),
+                    ),
                     _divider(),
-                    Icon(Icons.warning, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => WarningScreen()),
+                        );
+                      },
+                      child: Icon(Icons.warning, color: Colors.white),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    Icon(Icons.cloud, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CloudScreen()),
+                        );
+                      },
+                      child: Icon(Icons.cloud, color: Colors.white),
+                    ),
                     SizedBox(width: 10),
-                    Icon(Icons.notifications, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => NotificationsScreen()),
+                        );
+                      },
+                      child: Icon(Icons.notifications, color: Colors.white),
+                    ),
                     SizedBox(width: 10),
-                    Icon(Icons.info, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => InfoScreen()),
+                        );
+                      },
+                      child: Icon(Icons.info, color: Colors.white),
+                    ),
                     SizedBox(width: 10),
-                    Icon(Icons.person, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfileScreen()),
+                        );
+                      },
+                      child: Icon(Icons.person, color: Colors.white),
+                    ),
                     SizedBox(width: 10),
-                    Icon(Icons.settings, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => SettingsScreen()),
+                        );
+                      },
+                      child: Icon(Icons.settings, color: Colors.white),
+                    ),
                   ],
                 )
               ],
@@ -72,7 +161,7 @@ class HomeScreen extends StatelessWidget {
                       crossAxisCount: 5,
                       crossAxisSpacing: 10,
                       mainAxisSpacing: 10,
-                      children: List.generate(5, (index) => _buildGridItem(context, index)),
+                      children: List.generate(7, (index) => _buildGridItem(context, index)),
                     ),
                     SizedBox(height: 20),
                     Text(
@@ -85,7 +174,15 @@ class HomeScreen extends StatelessWidget {
                     Text('24/7 CUSTOMER SERVICE 877.471.DDFS', style: TextStyle(color: Colors.white)),
                     Align(
                       alignment: Alignment.bottomRight,
-                      child: Icon(Icons.message, color: Colors.white, size: 30),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MessageScreen()),
+                          );
+                        },
+                        child: Icon(Icons.messenger, color: Colors.white, size: 30,),
+                      ),
                     ),
                   ],
                 ),
@@ -162,6 +259,26 @@ class HomeScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => RemoteSupportScreen()),
+          );
+        },
+      },
+      {
+        'icon': Icons.calendar_today,
+        'title': 'Schedule an Appointment',
+        'onPressed': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ScheduleAppointmentScreen()),
+          );
+        },
+      },
+      {
+        'icon': Icons.settings,
+        'title': 'Settings',
+        'onPressed': () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsScreen()),
           );
         },
       },
