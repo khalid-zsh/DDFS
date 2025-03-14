@@ -23,7 +23,7 @@ std::vector<std::string> GetConnectedUSBDevices() {
     for (int i = 0; SetupDiEnumDeviceInfo(deviceInfo, i, &deviceData); i++) {
         wchar_t deviceName[256];
         if (SetupDiGetDeviceRegistryPropertyW(deviceInfo, &deviceData, SPDRP_FRIENDLYNAME, NULL, (PBYTE)deviceName, sizeof(deviceName), NULL)) {
-            devices.push_back(ConvertWStringToString(deviceName)); // ✅ Safe conversion
+            devices.push_back(ConvertWStringToString(deviceName));
         }
     }
 

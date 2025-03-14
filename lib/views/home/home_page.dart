@@ -2,8 +2,6 @@ import 'package:ddfs/views/home/emty_page.dart';
 import 'package:ddfs/views/home/extraction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../services/teamviewer_service.dart';
-import '../../services/zoom_service.dart';
 import '../home/device_list_page.dart';
 import '../home/logs_page.dart';
 import '../home/settings_page.dart';
@@ -121,15 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 20),
 
                     // New TeamViewer & Zoom Buttons
-                    ElevatedButton(
-                      onPressed: () => TeamViewerService.launchTeamViewer(),
-                      child: const Text("Launch TeamViewer"),
-                    ),
-                    const SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () => ZoomService.launchZoom(),
-                      child: const Text("Join Zoom Meeting"),
-                    ),
 
                     Align(
                       alignment: Alignment.bottomRight,
