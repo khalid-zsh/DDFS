@@ -16,7 +16,7 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
     channel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
                                      std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
         if (call.method_name().compare("launchTeamViewer") == 0) {
-            ShellExecute(0, "open", "C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", "", 0, SW_SHOW);
+            ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
             result->Success();
         } else {
             result->NotImplemented();
@@ -29,7 +29,7 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
     zoomChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
                                          std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
         if (call.method_name().compare("launchZoom") == 0) {
-            ShellExecute(0, "open", "https://zoom.us/join", "", 0, SW_SHOW);
+            ShellExecute(0, L"open", L"https://zoom.us/join", nullptr, nullptr, SW_SHOW);
             result->Success();
         } else {
             result->NotImplemented();

@@ -1,10 +1,10 @@
+import 'package:ddfs/views/home/emty_page.dart';
+import 'package:ddfs/views/home/extraction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../services/teamviewer_service.dart';
 import '../../services/zoom_service.dart';
-import '../../services/device_service.dart';
 import '../home/device_list_page.dart';
-import '../home/extraction_page.dart';
 import '../home/logs_page.dart';
 import '../home/settings_page.dart';
 import '../home/help_page.dart';
@@ -19,19 +19,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<String> connectedDevices = [];
-
   @override
   void initState() {
     super.initState();
-    _fetchConnectedDevices();
-  }
-
-  void _fetchConnectedDevices() async {
-    List<String> devices = await DeviceService.getConnectedDevices();
-    setState(() {
-      connectedDevices = devices;
-    });
   }
 
   @override
@@ -58,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Image.asset('assets/Logo/logo.png', height: 30),
                     const SizedBox(width: 20),
-                    _menuItem("Menu", () => Get.to(() => const DeviceListPage())),
+                    _menuItem("Menu", () => Get.to(() => const EmtyPage())),
                     _divider(),
                     _menuItem("Devices", () => Get.to(() => const DeviceListPage())),
                     _divider(),
@@ -141,15 +131,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Text("Join Zoom Meeting"),
                     ),
 
-                    const SizedBox(height: 20),
-                    const Text("Connected USB Devices:", style: TextStyle(color: Colors.white, fontSize: 16)),
-                    ...connectedDevices.map((device) => Text(device, style: const TextStyle(color: Colors.white))),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _fetchConnectedDevices,
-                      child: const Text("Refresh Devices"),
-                    ),
-
                     Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
@@ -201,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ];
 
     return GestureDetector(
-      onTap: () => Get.to(() => data[index]['page']),
+      onTap: () => Get.to(data[index]['page']),
       child: Container(
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(border: Border.all(color: Colors.white), color: Colors.grey[800]),
@@ -213,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(data[index]['title'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.white)),
             const SizedBox(height: 10),
             OutlinedButton(
-              onPressed: () => Get.to(() => data[index]['page']),
+              onPressed: () => Get.to(data[index]['page']),
               style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.blue)),
               child: const Text('Get Started', style: TextStyle(color: Colors.blue)),
             ),
