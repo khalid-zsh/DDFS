@@ -7,7 +7,6 @@ import '../home/logs_page.dart';
 import '../home/settings_page.dart';
 import '../home/help_page.dart';
 import '../home/teamviewer_page.dart';
-import '../home/calendly_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +16,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final List<Map<String, dynamic>> service = [
+    {'icon': 'assets/icon/smartphone.png', 'title': 'Mobile\nData Extraction', 'page': ExtractionPage(deviceType: "Mobile Phone", deviceId: "deviceId1")},
+    {'icon': 'assets/icon/tablet (1).png', 'title': 'Tablet\nData Extraction', 'page': ExtractionPage(deviceType: "Tablet", deviceId: "deviceId2")},
+    {'icon': 'assets/icon/smartwatch.png', 'title': 'Smart Watch\nData Extraction', 'page': ExtractionPage(deviceType: "Smart Watch", deviceId: "deviceId3")},
+    {'icon': 'assets/icon/laptop-computer.png', 'title': 'PC or Mac\nData Extraction', 'page': ExtractionPage(deviceType: "PC or Mac", deviceId: "deviceId4")},
+    {'icon': 'assets/icon/teleworking.png', 'title': 'Remote\nSupport', 'page': const HelpPage()},
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -28,9 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text(
+        title: Text(
           'D D F S   D A T A  E X T R A C T I O N   H U B',
-          style: TextStyle(letterSpacing: 2),
+          style: TextStyle(
+              fontFamily: 'Font-2',
+              letterSpacing: 2,
+              fontSize: 26
+          ),
         ),
         centerTitle: true,
       ),
@@ -38,13 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             color: Colors.grey[900],
+            height: 90,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Image.asset('assets/Logo/logo.png', height: 30),
+                    Image.asset('assets/Logo/logo.png', height: 34),
                     const SizedBox(width: 20),
                     _menuItem("Menu", () => Get.to(() => const EmtyPage())),
                     _divider(),
@@ -56,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _divider(),
                     GestureDetector(
                       onTap: () => Get.to(() => const LogsPage()),
-                      child: const Icon(Icons.warning, color: Colors.white),
+                      child: Image.asset('assets/icon/warning_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png', height: 24), // Use custom icon
                     ),
                   ],
                 ),
@@ -64,27 +76,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Get.to(() => const TeamViewerPage()),
-                      child: const Icon(Icons.cloud, color: Colors.white),
+                      child: Image.asset('assets/icon/cloud.png', height: 30), // Use custom icon
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const LogsPage()),
-                      child: const Icon(Icons.notifications, color: Colors.white),
+                      child: Image.asset('assets/icon/notifications.png', height: 30), // Use custom icon
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const HelpPage()),
-                      child: const Icon(Icons.info, color: Colors.white),
+                      child: Image.asset('assets/icon/info.png', height: 30), // Use custom icon
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const SettingsPage()),
-                      child: const Icon(Icons.person, color: Colors.white),
+                      child: Image.asset('assets/icon/account.png', height: 30), // Use custom icon
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const SettingsPage()),
-                      child: const Icon(Icons.settings, color: Colors.white),
+                      child: Image.asset('assets/icon/settings.png', height: 30), // Use custom icon
                     ),
                   ],
                 )
@@ -94,31 +106,48 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: Center(
               child: Container(
-                width: MediaQuery.of(context).size.width * 0.8,
+                width: MediaQuery.of(context).size.width * 0.9,
                 color: Colors.grey[850],
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    GridView.count(
+                    GridView.builder(
                       shrinkWrap: true,
-                      crossAxisCount: 5,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      children: List.generate(6, (index) => _buildGridItem(context, index)),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                        childAspectRatio: 0.8,
+                        crossAxisSpacing: 70,
+                      ),
+                      itemCount: service.length,
+                      itemBuilder: (context, index) {
+                        return _buildServiceCard(context, index);
+                      },
                     ),
-                    const SizedBox(height: 20),
-                    const Text(
+                    const SizedBox(height: 40),
+                    Text(
                       'R E M O T E  D A T A  C O L L E C T I O N  U N I T',
-                      style: TextStyle(color: Colors.white, fontSize: 16, letterSpacing: 2),
+                      style: TextStyle(
+                        fontFamily: '',
+                        color: Colors.white,
+                        fontSize: 30,
+                        letterSpacing: 2,
+                      ),
                     ),
                     const SizedBox(height: 5),
-                    const Text('UNIT ID: DDFS_RDCU_0003', style: TextStyle(color: Colors.white)),
+                    Text('U N I T  I D : D D F S _ R D C U _ 0 0 0 3',
+                        style: TextStyle(
+                          fontFamily: '',
+                          color: Colors.white,
+                          fontSize: 20,
+                        )),
                     const SizedBox(height: 5),
-                    const Text('24/7 CUSTOMER SERVICE 877.471.DDFS', style: TextStyle(color: Colors.white)),
-                    const SizedBox(height: 20),
-
-                    // New TeamViewer & Zoom Buttons
+                    Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
+                        style: TextStyle(
+                          fontFamily: '',
+                          color: Colors.white,
+                          fontSize: 20,
+                        )),
 
                     Align(
                       alignment: Alignment.bottomRight,
@@ -134,11 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Container(
             color: Colors.blue,
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(2.7),
             alignment: Alignment.center,
-            child: const Text(
+            child: Text(
               'Copyright © 2025 DDFS. All rights reserved.',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                  fontFamily: 'CustomFont',
+                  color: Colors.white,
+                  fontSize: 6
+              ),
             ),
           )
         ],
@@ -156,39 +189,55 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _menuItem(String title, VoidCallback onTap) {
     return GestureDetector(
       onTap: onTap,
-      child: Text(title, style: const TextStyle(color: Colors.white)),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontFamily: 'Font-3',
+          color: Colors.white,
+          fontSize: 20,
+        ),
+      ),
     );
   }
 
-  Widget _buildGridItem(BuildContext context, int index) {
-    List<Map<String, dynamic>> data = [
-      {'icon': Icons.phone_iphone, 'title': 'Mobile Data Extraction', 'page': ExtractionPage(deviceType: "Mobile Phone")},
-      {'icon': Icons.tablet, 'title': 'Tablet Data Extraction', 'page': ExtractionPage(deviceType: "Tablet")},
-      {'icon': Icons.watch, 'title': 'Smart Watch Data Extraction', 'page': ExtractionPage(deviceType: "Smart Watch")},
-      {'icon': Icons.laptop, 'title': 'PC or Mac Data Extraction', 'page': ExtractionPage(deviceType: "PC or Mac")},
-      {'icon': Icons.support, 'title': 'Remote Support', 'page': const HelpPage()},
-      {'icon': Icons.calendar_today, 'title': 'Schedule an Appointment', 'page': const CalendlyPage()},
-    ];
-
-    return GestureDetector(
-      onTap: () => Get.to(data[index]['page']),
-      child: Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(border: Border.all(color: Colors.white), color: Colors.grey[800]),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(data[index]['icon'], color: Colors.white, size: 40),
-            const SizedBox(height: 10),
-            Text(data[index]['title'], textAlign: TextAlign.center, style: const TextStyle(color: Colors.white)),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: () => Get.to(data[index]['page']),
-              style: OutlinedButton.styleFrom(side: const BorderSide(color: Colors.blue)),
-              child: const Text('Get Started', style: TextStyle(color: Colors.blue)),
+  Widget _buildServiceCard(BuildContext context, int index) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white54, width: 2),
+        borderRadius: BorderRadius.circular(0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image.asset(service[index]['icon'], height: 90),
+          const SizedBox(height: 10),
+          Text(
+            service[index]['title'],
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontFamily: 'Font-3',
+              color: Colors.white,
+              fontSize: 18,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 10),
+          OutlinedButton(
+            onPressed: () => Get.to(service[index]['page']),
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Colors.blue),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, // Set the border radius to 0
+              ),
+            ),
+            child: const Text(
+              'Get Started',
+              style: TextStyle(
+                fontFamily: 'Font-2',
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

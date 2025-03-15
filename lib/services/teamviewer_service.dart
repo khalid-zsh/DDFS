@@ -4,7 +4,7 @@ import 'dart:convert';
 
 class TeamViewerService {
   static const MethodChannel _channel = MethodChannel('com.ddfs/teamviewer');
-  static const String apiKey = "your-teamviewer-api-key"; // Replace with actual API key
+  static const String apiKey = "your-teamviewer-api-key";
 
   /// Launch TeamViewer
   static Future<void> launchTeamViewer() async {

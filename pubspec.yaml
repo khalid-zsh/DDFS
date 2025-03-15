@@ -45,6 +45,7 @@ dependencies:
   mailer: ^6.4.1
   file_picker: ^9.1.0
   archive: ^4.0.4
+  google_fonts: ^6.2.1
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,26 @@ flutter:
   assets:
     - assets/Logo/logo1.png
     - assets/Logo/logo.png
+    - assets/pdf/Mobile Phone.pdf
+    - assets/pdf/PC.pdf
+    - assets/pdf/Smart Watch.pdf
+    - assets/pdf/Tblet.pdf
+    - assets/icon/account.png
+    - assets/icon/cloud.png
+    - assets/icon/info.png
+    - assets/icon/laptop.png
+    - assets/icon/laptop-computer.png
+    - assets/icon/notifications.png
+    - assets/icon/phone_iphone.png
+    - assets/icon/settings.png
+    - assets/icon/smartphone.png
+    - assets/icon/smartwatch.png
+    - assets/icon/tablet.png
+    - assets/icon/tablet (1).png
+    - assets/icon/teleworking.png
+    - assets/icon/warning_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png
+    - assets/icon/watch.png
+    - assets/Logo/DDFS Logo 11.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -84,17 +105,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/to/font-from-package
+  fonts:
+   - family: Font-1
+     fonts:
+       - asset: assets/fonts/ArialMdm.ttf
+   - family: Font-2
+     fonts:
+       - asset: assets/fonts/ARIALBD 1.ttf
+   - family: Font-3
+     fonts:
+       - asset: assets/fonts/Calibri.ttf
+

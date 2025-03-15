@@ -6,7 +6,7 @@ class ExtractionDonePopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3), () => Get.back()); // Auto-close after 3 sec
+    Future.delayed(const Duration(seconds: 2), () => Get.back()); // Auto-close after 3 sec
 
     return Dialog(
       child: Column(

@@ -11,6 +11,15 @@ class AppRoutes {
     GetPage(name: '/settings', page: () => const SettingsPage()),
     GetPage(name: '/help', page: () => const HelpPage()),
     GetPage(name: '/teamviewer', page: () => const TeamViewerPage()),
-    GetPage(name: '/pdf_popup', page: () => const PdfPopup(filePath: "", isPdf: true)),
+    GetPage(
+      name: '/pdf_popup',
+      page: () => PdfPopup(
+        filePath: "",
+        isPdf: true,
+        onStartExtraction: () {
+          print("Starting data extraction...");
+        },
+      ),
+    ),
   ];
 }

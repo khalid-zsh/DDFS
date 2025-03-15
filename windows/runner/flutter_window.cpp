@@ -27,6 +27,8 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
         }
     });
 
+
+
     auto zoomChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
             engine->messenger(), "com.ddfs/zoom", &flutter::StandardMethodCodec::GetInstance());
 

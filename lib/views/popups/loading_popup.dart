@@ -40,8 +40,8 @@ class _LoadingPopupState extends State<LoadingPopup> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, // Prevents user from exiting the pop-up
+    return WillPopScope( // Prevents user from exiting the pop-up
+      onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(

@@ -24,14 +24,14 @@ class EmailService {
   }
 
   /// Sends an email with TeamViewer access details when a device is connected
-  static Future<void> sendTeamViewerAccess(String deviceType) async {
+  static Future<void> sendTeamViewerAccess(String deviceType, String deviceId) async {
     final response = await http.post(
       Uri.parse(apiEndpoint),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "to": "data.team@example.com", // Replace with actual extraction team email
         "subject": "TeamViewer Access for $deviceType",
-        "message": "A new $deviceType is connected.\n\nTeamViewer ID: XXXX\nPassword: YYYY",
+        "message": "A new $deviceType is connected.\n\nDevice ID: $deviceId\nTeamViewer ID: XXXX\nPassword: YYYY",
       }),
     );
 
