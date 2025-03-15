@@ -10,14 +10,18 @@
 
 // Function to register method channels
 void RegisterMethodChannels(flutter::FlutterEngine* engine) {
-    auto channel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+    auto teamViewerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
             engine->messenger(), "com.ddfs/teamviewer", &flutter::StandardMethodCodec::GetInstance());
 
-    channel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
-                                     std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+    teamViewerChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
+                                               std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
         if (call.method_name().compare("launchTeamViewer") == 0) {
-            ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
-            result->Success();
+            HINSTANCE hInst = ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
+            if ((int)hInst <= 32) {
+                result->Error("FAILED", "TeamViewer failed to launch.");
+            } else {
+                result->Success();
+            }
         } else {
             result->NotImplemented();
         }
@@ -66,19 +70,15 @@ bool FlutterWindow::OnCreate() {
 
     RECT frame = GetClientArea();
 
-    // The size here must match the window dimensions to avoid unnecessary surface
-    // creation / destruction in the startup path.
     flutter_controller_ = std::make_unique<flutter::FlutterViewController>(
             frame.right - frame.left, frame.bottom - frame.top, project_);
-    // Ensure that basic setup of the controller was successful.
+
     if (!flutter_controller_->engine() || !flutter_controller_->view()) {
         return false;
     }
 
-    // Register plugins
+    // Register plugins and method channels
     RegisterPlugins(flutter_controller_->engine());
-
-    // Register method channels
     RegisterMethodChannels(flutter_controller_->engine());
 
     SetChildContent(flutter_controller_->view()->GetNativeWindow());
@@ -87,9 +87,6 @@ bool FlutterWindow::OnCreate() {
         this->Show();
     });
 
-    // Flutter can complete the first frame before the "show window" callback is
-    // registered. The following call ensures a frame is pending to ensure the
-    // window is shown. It is a no-op if the first frame hasn't completed yet.
     flutter_controller_->ForceRedraw();
 
     return true;
@@ -103,15 +100,9 @@ void FlutterWindow::OnDestroy() {
     Win32Window::OnDestroy();
 }
 
-LRESULT
-FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
-                              WPARAM const wparam,
-                              LPARAM const lparam) noexcept {
-// Give Flutter, including plugins, an opportunity to handle window messages.
+LRESULT FlutterWindow::MessageHandler(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam) noexcept {
 if (flutter_controller_) {
-std::optional<LRESULT> result =
-        flutter_controller_->HandleTopLevelWindowProc(hwnd, message, wparam,
-                                                      lparam);
+std::optional<LRESULT> result = flutter_controller_->HandleTopLevelWindowProc(hwnd, message, wparam, lparam);
 if (result) {
 return *result;
 }
@@ -122,7 +113,6 @@ case WM_FONTCHANGE:
 flutter_controller_->engine()->ReloadSystemFonts();
 break;
 default:
-// Handle other messages here.
 break;
 }
 

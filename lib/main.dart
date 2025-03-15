@@ -7,11 +7,8 @@ import 'app.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Setup full-screen mode & hide Windows UI
+  // Setup full-screen mode
 
-  PlatformUtils.hideTaskbar();
-  PlatformUtils.setFullScreen();
-  PlatformUtils.disableCloseButton();
 
   // Enable auto-start at Windows boot
   StartupManager.enableAutoStart();

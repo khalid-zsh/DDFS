@@ -32,22 +32,43 @@ class _DeviceListPageState extends State<DeviceListPage> {
     }).toList();
 
     List<DeviceModel> deviceModels = [];
-    int idCounter = 1;
+    Set<String> existingDeviceNames = deviceController.connectedDevices.map((device) => device.name).toSet();
+
     for (Map<String, String> device in devices) {
-      try {
-        deviceModels.add(DeviceModel(
-          id: idCounter.toString(),
-          name: device['name'] ?? 'Unknown',
-          type: device['type'] ?? 'Unknown',
-          status: device['status'] ?? 'Disconnected',
-        ));
-        idCounter++;
-      } catch (e) {
-        print("Error processing device: ${device['name']}, error: $e");
+      if (!existingDeviceNames.contains(device['name'])) {
+        try {
+          // Auto-detect allowed devices
+          bool isAllowedDevice = _isAllowedDevice(device['name'] ?? '');
+
+          if (isAllowedDevice) {
+            deviceModels.add(DeviceModel(
+              id: (deviceController.connectedDevices.length + deviceModels.length + 1).toString(),
+              name: device['name'] ?? 'Unknown',
+              type: device['type'] ?? 'Unknown',
+              status: device['status'] ?? 'Disconnected',
+            ));
+          }
+        } catch (e) {
+          print("Error processing device: ${device['name']}, error: $e");
+        }
       }
     }
 
-    deviceController.connectedDevices.value = deviceModels;
+    deviceController.connectedDevices.addAll(deviceModels);
+  }
+
+  bool _isAllowedDevice(String deviceName) {
+    // Define keywords typically associated with the allowed devices
+    List<String> allowedKeywords = [
+      'android', 'iphone', 'ipad', 'macbook', 'imac', 'windows', 'linux', 'tablet', 'smartwatch', 'pen drive', 'usb drive'
+    ];
+
+    for (String keyword in allowedKeywords) {
+      if (deviceName.toLowerCase().contains(keyword)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
