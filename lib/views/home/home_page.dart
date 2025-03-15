@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Row(
                   children: [
-                    Image.asset('assets/Logo/logo.png', height: 34),
+                    Image.asset('assets/Logo/DDFS Logo 5.png', height: 800),
                     const SizedBox(width: 20),
                     _menuItem("Menu", () => Get.to(() => const EmtyPage())),
                     _divider(),
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     _divider(),
                     GestureDetector(
                       onTap: () => Get.to(() => const LogsPage()),
-                      child: Image.asset('assets/icon/warning_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png', height: 24), // Use custom icon
+                      child: Image.asset('assets/icon/warning_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png', height: 24),
                     ),
                   ],
                 ),
@@ -76,27 +76,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     GestureDetector(
                       onTap: () => Get.to(() => const TeamViewerPage()),
-                      child: Image.asset('assets/icon/cloud.png', height: 30), // Use custom icon
+                      child: Image.asset('assets/icon/cloud.png', height: 30),
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const LogsPage()),
-                      child: Image.asset('assets/icon/notifications.png', height: 30), // Use custom icon
+                      child: Image.asset('assets/icon/notifications.png', height: 30),
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const HelpPage()),
-                      child: Image.asset('assets/icon/info.png', height: 30), // Use custom icon
+                      child: Image.asset('assets/icon/info.png', height: 30),
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const SettingsPage()),
-                      child: Image.asset('assets/icon/account.png', height: 30), // Use custom icon
+                      child: Image.asset('assets/icon/account.png', height: 30),
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
                       onTap: () => Get.to(() => const SettingsPage()),
-                      child: Image.asset('assets/icon/settings.png', height: 30), // Use custom icon
+                      child: Image.asset('assets/icon/settings.png', height: 30),
                     ),
                   ],
                 )
@@ -226,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: OutlinedButton.styleFrom(
               side: const BorderSide(color: Colors.blue),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero, // Set the border radius to 0
+                borderRadius: BorderRadius.zero,
               ),
             ),
             child: const Text(
