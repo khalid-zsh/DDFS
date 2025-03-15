@@ -54,7 +54,8 @@ class _DeviceListPageState extends State<DeviceListPage> {
       }
     }
 
-    deviceController.connectedDevices.addAll(deviceModels);
+    // Refresh list: Clear old devices and update new ones
+    deviceController.connectedDevices.assignAll(deviceModels);
   }
 
   bool _isAllowedDevice(String deviceName) {

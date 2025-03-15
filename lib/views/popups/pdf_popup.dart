@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'dart:io';
 
 class PdfPopup extends StatelessWidget {
   final String filePath;
@@ -21,14 +22,10 @@ class PdfPopup extends StatelessWidget {
           AppBar(title: const Text("Guide Viewer"), automaticallyImplyLeading: false),
           Expanded(
             child: isPdf
-                ? PDFView(
-              filePath: filePath,
-              enableSwipe: true,
-              swipeHorizontal: true,
-              autoSpacing: true,
-              pageFling: true,
+                ? SfPdfViewer.file(
+              File(filePath),
             ) // Load PDF
-                : Image.asset(filePath, fit: BoxFit.contain), // Load Image
+                : Image.asset(filePath, fit: BoxFit.contain),
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),

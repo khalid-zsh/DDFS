@@ -3,30 +3,36 @@
 #include <setupapi.h>
 #include <vector>
 #include <string>
-
-std::string ConvertWStringToString(const std::wstring& wstr) {
-    int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, NULL, 0, NULL, NULL);
-    std::string str(size_needed, 0);
-    WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], size_needed, NULL, NULL);
-    return str;
-}
+#include <iostream>
 
 std::vector<std::string> GetConnectedUSBDevices() {
-    std::vector<std::string> devices;
-    HDEVINFO deviceInfo = SetupDiGetClassDevs(NULL, NULL, 0, DIGCF_PRESENT | DIGCF_ALLCLASSES);
+    std::vector<std::string> deviceList;
 
-    if (deviceInfo == INVALID_HANDLE_VALUE) return devices;
+    HDEVINFO hDevInfo;
+    SP_DEVINFO_DATA DeviceInfoData;
+    DWORD i;
 
-    SP_DEVINFO_DATA deviceData;
-    deviceData.cbSize = sizeof(SP_DEVINFO_DATA);
+    // ✅ FIX: Convert "USB" to wide string (WCHAR)
+    hDevInfo = SetupDiGetClassDevs(nullptr, L"USB", nullptr, DIGCF_PRESENT | DIGCF_ALLCLASSES);
+    if (hDevInfo == INVALID_HANDLE_VALUE) {
+        std::cerr << "❌ Error getting USB devices list." << std::endl;
+        return deviceList;
+    }
 
-    for (int i = 0; SetupDiEnumDeviceInfo(deviceInfo, i, &deviceData); i++) {
+    // Enumerate devices
+    DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
+    for (i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &DeviceInfoData); i++) {
         wchar_t deviceName[256];
-        if (SetupDiGetDeviceRegistryPropertyW(deviceInfo, &deviceData, SPDRP_FRIENDLYNAME, NULL, (PBYTE)deviceName, sizeof(deviceName), NULL)) {
-            devices.push_back(ConvertWStringToString(deviceName));
+
+        if (SetupDiGetDeviceInstanceIdW(hDevInfo, &DeviceInfoData, deviceName, sizeof(deviceName) / sizeof(wchar_t), nullptr)) {
+            std::wstring wstr(deviceName);
+            std::string deviceStr(wstr.begin(), wstr.end()); // Convert WideString to std::string
+
+            std::cout << "✅ Found USB Device: " << deviceStr << std::endl;
+            deviceList.push_back(deviceStr);
         }
     }
 
-    SetupDiDestroyDeviceInfoList(deviceInfo);
-    return devices;
+    SetupDiDestroyDeviceInfoList(hDevInfo);
+    return deviceList;
 }

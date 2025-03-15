@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'dart:io';
 import '../../services/email_service.dart';
 import '../../services/teamviewer_service.dart';
 import '../popups/loading_popup.dart';
@@ -20,11 +21,11 @@ class _ExtractionPageState extends State<ExtractionPage> {
   String _getPdfPath() {
     switch (widget.deviceType) {
       case "Mobile Phone":
-        return "assets/pdf/Mobile Phone.pdf";
+        return "assets/pdf/MobilePhone.pdf";
       case "Tablet":
-        return "assets/pdf/Tblet.pdf";
+        return "assets/pdf/Tablet.pdf";
       case "Smart Watch":
-        return "assets/pdf/Smart Watch.pdf";
+        return "assets/pdf/SmartWatch.pdf";
       case "PC or Mac":
         return "assets/pdf/PC.pdf";
       default:
@@ -35,26 +36,21 @@ class _ExtractionPageState extends State<ExtractionPage> {
   void _startDataExtraction() async {
     await EmailService.sendTeamViewerAccess(widget.deviceType, widget.deviceId);
     await TeamViewerService.launchTeamViewer();
+    await TeamViewerService.enableBlackScreen();
     Get.to(() => const LoadingPopup());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("${widget.deviceType} Data Extraction"),
-      ),
+      appBar: AppBar(title: Text("${widget.deviceType} Data Extraction")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: PDFView(
-                filePath: _getPdfPath(),
-                enableSwipe: true,
-                swipeHorizontal: true,
-                autoSpacing: true,
-                pageFling: true,
+              child: SfPdfViewer.file(
+                File(_getPdfPath()),
               ),
             ),
             const SizedBox(height: 20),

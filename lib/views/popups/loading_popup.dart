@@ -15,7 +15,7 @@ class _LoadingPopupState extends State<LoadingPopup> {
   @override
   void initState() {
     super.initState();
-    _monitorTeamViewerSession(); // Start monitoring TeamViewer session
+    _monitorTeamViewerSession();
   }
 
   void _monitorTeamViewerSession() async {
@@ -34,14 +34,14 @@ class _LoadingPopupState extends State<LoadingPopup> {
 
   void _exitLoadingScreen() {
     if (isExtractionComplete) {
-      Get.offAllNamed('/home'); // Navigate back to Home Page
+      Get.offAllNamed('/home'); // ✅ Return to Home Page
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope( // Prevents user from exiting the pop-up
-      onWillPop: () async => false,
+    return PopScope(
+      canPop: false, // ❌ Blocks Escape & Back Button
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Stack(

@@ -17,7 +17,7 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
                                                std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
         if (call.method_name().compare("launchTeamViewer") == 0) {
             HINSTANCE hInst = ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
-            if ((int)hInst <= 32) {
+            if (reinterpret_cast<intptr_t>(hInst) <= 32) {
                 result->Error("FAILED", "TeamViewer failed to launch.");
             } else {
                 result->Success();
@@ -26,8 +26,6 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
             result->NotImplemented();
         }
     });
-
-
 
     auto zoomChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
             engine->messenger(), "com.ddfs/zoom", &flutter::StandardMethodCodec::GetInstance());

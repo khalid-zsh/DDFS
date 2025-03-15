@@ -1,9 +1,10 @@
 #ifndef USB_DETECTION_H
 #define USB_DETECTION_H
 
-#include <string>
 #include <vector>
+#include <string>
 
+// Function to get a list of connected USB devices
 std::vector<std::string> GetConnectedUSBDevices();
 
-#endif
+#endif // USB_DETECTION_H
