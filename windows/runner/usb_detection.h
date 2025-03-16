@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 
-// Function to get a list of connected USB devices
-std::vector<std::string> GetConnectedUSBDevices();
+std::vector<std::pair<std::string, std::string>> GetConnectedUSBDevices();
 
 #endif // USB_DETECTION_H

@@ -21,55 +21,27 @@ class _DeviceListPageState extends State<DeviceListPage> {
   }
 
   void _fetchConnectedDevices() async {
-    List<String> deviceNames = await DeviceService.getConnectedDevices();
+    List<Map<String, String>> devices = await DeviceService.getConnectedDevices();
 
-    List<Map<String, String>> devices = deviceNames.map((device) {
-      return {
-        'name': device,
-        'type': 'Unknown', // Default type (Update this if needed)
-        'status': 'Connected', // Default status
-      };
+    if (devices.isEmpty) {
+      print("🔴 No devices found after scanning.");
+    } else {
+      print("✅ Connected Devices: $devices");
+    }
+
+    List<DeviceModel> deviceModels = devices.asMap().entries.map((entry) {
+      int index = entry.key;
+      Map<String, String> device = entry.value;
+      return DeviceModel(
+        id: (index + 1).toString(),
+        name: device['name'] ?? 'Unknown',
+        type: device['type'] ?? 'Unknown',
+        status: device['status'] ?? 'Disconnected',
+      );
     }).toList();
 
-    List<DeviceModel> deviceModels = [];
-    Set<String> existingDeviceNames = deviceController.connectedDevices.map((device) => device.name).toSet();
-
-    for (Map<String, String> device in devices) {
-      if (!existingDeviceNames.contains(device['name'])) {
-        try {
-          // Auto-detect allowed devices
-          bool isAllowedDevice = _isAllowedDevice(device['name'] ?? '');
-
-          if (isAllowedDevice) {
-            deviceModels.add(DeviceModel(
-              id: (deviceController.connectedDevices.length + deviceModels.length + 1).toString(),
-              name: device['name'] ?? 'Unknown',
-              type: device['type'] ?? 'Unknown',
-              status: device['status'] ?? 'Disconnected',
-            ));
-          }
-        } catch (e) {
-          print("Error processing device: ${device['name']}, error: $e");
-        }
-      }
-    }
-
-    // Refresh list: Clear old devices and update new ones
+    // Clear old devices and update new ones
     deviceController.connectedDevices.assignAll(deviceModels);
-  }
-
-  bool _isAllowedDevice(String deviceName) {
-    // Define keywords typically associated with the allowed devices
-    List<String> allowedKeywords = [
-      'android', 'iphone', 'ipad', 'macbook', 'imac', 'windows', 'linux', 'tablet', 'smartwatch', 'pen drive', 'usb drive'
-    ];
-
-    for (String keyword in allowedKeywords) {
-      if (deviceName.toLowerCase().contains(keyword)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @override

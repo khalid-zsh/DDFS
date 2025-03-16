@@ -20,7 +20,7 @@ class _LoadingPopupState extends State<LoadingPopup> {
 
   void _monitorTeamViewerSession() async {
     while (true) {
-      await Future.delayed(const Duration(seconds: 5)); // Check every 5 seconds
+      await Future.delayed(const Duration(seconds: 5));
 
       bool isSessionActive = await TeamViewerService.isSessionActive();
       if (!isSessionActive) {

@@ -5,14 +5,14 @@
 #include <string>
 #include <iostream>
 
-std::vector<std::string> GetConnectedUSBDevices() {
-    std::vector<std::string> deviceList;
+std::vector<std::pair<std::string, std::string>> GetConnectedUSBDevices() {
+    std::vector<std::pair<std::string, std::string>> deviceList;
 
     HDEVINFO hDevInfo;
     SP_DEVINFO_DATA DeviceInfoData;
     DWORD i;
 
-    // ✅ FIX: Convert "USB" to wide string (WCHAR)
+    // Get device list
     hDevInfo = SetupDiGetClassDevs(nullptr, L"USB", nullptr, DIGCF_PRESENT | DIGCF_ALLCLASSES);
     if (hDevInfo == INVALID_HANDLE_VALUE) {
         std::cerr << "❌ Error getting USB devices list." << std::endl;
@@ -23,13 +23,24 @@ std::vector<std::string> GetConnectedUSBDevices() {
     DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     for (i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &DeviceInfoData); i++) {
         wchar_t deviceName[256];
+        wchar_t deviceType[256];
 
+        // Get device name
         if (SetupDiGetDeviceInstanceIdW(hDevInfo, &DeviceInfoData, deviceName, sizeof(deviceName) / sizeof(wchar_t), nullptr)) {
             std::wstring wstr(deviceName);
             std::string deviceStr(wstr.begin(), wstr.end()); // Convert WideString to std::string
 
-            std::cout << "✅ Found USB Device: " << deviceStr << std::endl;
-            deviceList.push_back(deviceStr);
+            // Get device type
+            if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &DeviceInfoData, SPDRP_CLASS, nullptr, (PBYTE)deviceType, sizeof(deviceType), nullptr)) {
+                std::wstring typeWstr(deviceType);
+                std::string typeStr(typeWstr.begin(), typeWstr.end());
+
+                std::cout << "✅ Found USB Device: " << deviceStr << " (Type: " << typeStr << ")" << std::endl;
+                deviceList.push_back({deviceStr, typeStr});
+            } else {
+                std::cout << "✅ Found USB Device: " << deviceStr << " (Type: Unknown)" << std::endl;
+                deviceList.push_back({deviceStr, "Unknown"});
+            }
         }
     }
 
