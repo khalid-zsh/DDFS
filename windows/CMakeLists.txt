@@ -1,9 +1,9 @@
 # Project-level configuration.
 cmake_minimum_required(VERSION 3.14)
-project(ddf LANGUAGES CXX)
+project(ddfs LANGUAGES CXX)
 
 # The name of the executable created for the application.
-set(BINARY_NAME "ddf")
+set(BINARY_NAME "ddfs")
 
 # Explicitly opt in to modern CMake behaviors.
 cmake_policy(VERSION 3.14...3.25)
