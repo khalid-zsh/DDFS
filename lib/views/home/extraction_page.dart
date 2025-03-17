@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../../services/email_service.dart';
 import '../../services/teamviewer_service.dart';
 import '../popups/loading_popup.dart';
-import 'dart:io';
+
 
 class ExtractionPage extends StatefulWidget {
   final String deviceType;
@@ -53,7 +53,7 @@ class _ExtractionPageState extends State<ExtractionPage> {
       body: Column(
         children: [
           Expanded(
-            child: SfPdfViewer.file(File(_getPdfPath())),
+            child: SfPdfViewer.asset(_getPdfPath()),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
