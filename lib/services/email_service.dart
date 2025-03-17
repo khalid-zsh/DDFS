@@ -1,6 +1,9 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class EmailService {
+  static const MethodChannel _teamViewerChannel = MethodChannel('com.ddfs/teamviewer');
+
   /// Sends a general email with subject & message
   static Future<void> sendEmail(String to, String subject, String message) async {
     final Email email = Email(
@@ -23,7 +26,7 @@ class EmailService {
     final Email email = Email(
       body: "A new $deviceName is connected.\n\nDevice ID: $deviceId\nTeamViewer ID: XXXX\nPassword: YYYY",
       subject: "TeamViewer Access for $deviceName",
-      recipients: ["eyeshotkhalid@gmail.com"], // Replace with actual extraction team email
+      recipients: ["eyeshotkhalid@gmail.com"],
       isHTML: false,
     );
 
@@ -32,6 +35,16 @@ class EmailService {
       print("✅ TeamViewer Access Email Sent Successfully");
     } catch (error) {
       print("❌ Error Sending TeamViewer Access Email: $error");
+    }
+  }
+
+  /// Launches TeamViewer
+  static Future<void> launchTeamViewer() async {
+    try {
+      await _teamViewerChannel.invokeMethod('launchTeamViewer');
+      print("✅ TeamViewer Launched Successfully");
+    } catch (error) {
+      print("❌ Error Launching TeamViewer: $error");
     }
   }
 }

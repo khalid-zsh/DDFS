@@ -57,6 +57,12 @@ target_sources(${BINARY_NAME} PRIVATE
         "runner/usb_detection.cpp"
 )
 
+# === TeamViewer Plugin Configuration ===
+# Ensure `teamviewer_plugin.cpp` is part of the build process.
+target_sources(${BINARY_NAME} PRIVATE
+        "teamviewer_plugin.cpp"
+)
+
 # Link the required libraries
 target_link_libraries(${BINARY_NAME} PRIVATE setupapi)
 

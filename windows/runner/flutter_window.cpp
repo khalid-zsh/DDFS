@@ -7,6 +7,7 @@
 #include "flutter/standard_method_codec.h"
 #include <windows.h>
 #include "usb_detection.h"
+#include "teamviewer_plugin.h"  // Include the header file here
 
 void RegisterMethodChannels(flutter::FlutterEngine* engine) {
     auto usbChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
@@ -26,6 +27,19 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
             }
 
             result->Success(flutter::EncodableValue(resultList));
+        } else {
+            result->NotImplemented();
+        }
+    });
+
+    auto teamViewerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+            engine->messenger(), "com.ddfs/teamviewer", &flutter::StandardMethodCodec::GetInstance());
+
+    teamViewerChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
+                                               std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
+        if (call.method_name().compare("launchTeamViewer") == 0) {
+            LaunchTeamViewer();
+            result->Success();
         } else {
             result->NotImplemented();
         }

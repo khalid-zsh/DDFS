@@ -1,6 +1,6 @@
 #include <windows.h>
-#include <string>
+#include "teamviewer_plugin.h"
 
 void LaunchTeamViewer() {
-    ShellExecute(0, "open", "C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", "", 0, SW_SHOW);
+    ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
 }

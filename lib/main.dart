@@ -9,7 +9,8 @@ void main() {
 
   // Setup full-screen mode
 
-
+  PlatformUtils.setFullScreen();
+  PlatformUtils.disableCloseButton();
   // Enable auto-start at Windows boot
   StartupManager.enableAutoStart();
 
