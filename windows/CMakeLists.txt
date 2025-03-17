@@ -53,7 +53,9 @@ include(flutter/generated_plugins.cmake)
 # === USB Detection Configuration ===
 # Ensure `usb_detection.cpp` is part of the build process.
 target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}/runner")
-target_sources(${BINARY_NAME} PRIVATE "runner/usb_detection.cpp")
+target_sources(${BINARY_NAME} PRIVATE
+        "runner/usb_detection.cpp"
+)
 
 # Link the required libraries
 target_link_libraries(${BINARY_NAME} PRIVATE setupapi)

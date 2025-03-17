@@ -1,7 +1,5 @@
 #include "flutter_window.h"
-
 #include <optional>
-
 #include "flutter/generated_plugin_registrant.h"
 #include "flutter/dart_project.h"
 #include "flutter/flutter_view_controller.h"
@@ -9,7 +7,6 @@
 #include "flutter/standard_method_codec.h"
 #include <windows.h>
 #include "usb_detection.h"
-#include "teamviewer_plugin.h"
 
 void RegisterMethodChannels(flutter::FlutterEngine* engine) {
     auto usbChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
@@ -33,11 +30,6 @@ void RegisterMethodChannels(flutter::FlutterEngine* engine) {
             result->NotImplemented();
         }
     });
-
-    // ✅ Corrected plugin registration using reinterpret_cast
-    TeamViewerPlugin::RegisterWithRegistrar(
-            reinterpret_cast<flutter::PluginRegistrarWindows*>(
-                    engine->GetRegistrarForPlugin("TeamViewerPlugin")));
 }
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
