@@ -21,7 +21,6 @@ class _LoadingPopupState extends State<LoadingPopup> {
   void _monitorTeamViewerSession() async {
     while (true) {
       await Future.delayed(const Duration(seconds: 5));
-
       bool isSessionActive = await TeamViewerService.isSessionActive();
       if (!isSessionActive) {
         setState(() {
@@ -34,38 +33,34 @@ class _LoadingPopupState extends State<LoadingPopup> {
 
   void _exitLoadingScreen() {
     if (isExtractionComplete) {
-      Get.offAllNamed('/home'); // ✅ Return to Home Page
+      Get.offAllNamed('/home');
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: false, // ❌ Blocks Escape & Back Button
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.black,
-        body: Stack(
-          children: [
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const CircularProgressIndicator(color: Colors.blue),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Data Extraction Process is On...",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                  const SizedBox(height: 20),
-                  if (isExtractionComplete)
-                    ElevatedButton(
-                      onPressed: _exitLoadingScreen,
-                      child: const Text("Close"),
-                    ),
-                ],
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircularProgressIndicator(color: Colors.blue),
+              const SizedBox(height: 20),
+              const Text(
+                "Data Extraction Process is On...",
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              if (isExtractionComplete)
+                ElevatedButton(
+                  onPressed: _exitLoadingScreen,
+                  child: const Text("Close"),
+                ),
+            ],
+          ),
         ),
       ),
     );

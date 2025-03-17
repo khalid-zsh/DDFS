@@ -1,49 +1,80 @@
 #include "usb_detection.h"
 #include <windows.h>
 #include <setupapi.h>
+#include <devguid.h>
+#include <regstr.h>
 #include <vector>
-#include <string>
 #include <iostream>
+#include <algorithm>  // Include for std::max
+#include <string>     // Include for std::wstring
 
-std::vector<std::pair<std::string, std::string>> GetConnectedUSBDevices() {
-    std::vector<std::pair<std::string, std::string>> deviceList;
+#pragma comment(lib, "setupapi.lib")
 
-    HDEVINFO hDevInfo;
-    SP_DEVINFO_DATA DeviceInfoData;
-    DWORD i;
+std::string GetDeviceProperty(HDEVINFO deviceInfoSet, SP_DEVINFO_DATA deviceInfoData, DWORD property) {
+    DWORD requiredSize = 0;
+    DWORD dataType;
 
-    // Get device list
-    hDevInfo = SetupDiGetClassDevs(nullptr, L"USB", nullptr, DIGCF_PRESENT | DIGCF_ALLCLASSES);
-    if (hDevInfo == INVALID_HANDLE_VALUE) {
-        std::cerr << "❌ Error getting USB devices list." << std::endl;
-        return deviceList;
-    }
-
-    // Enumerate devices
-    DeviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
-    for (i = 0; SetupDiEnumDeviceInfo(hDevInfo, i, &DeviceInfoData); i++) {
-        wchar_t deviceName[256];
-        wchar_t deviceType[256];
-
-        // Get device name
-        if (SetupDiGetDeviceInstanceIdW(hDevInfo, &DeviceInfoData, deviceName, sizeof(deviceName) / sizeof(wchar_t), nullptr)) {
-            std::wstring wstr(deviceName);
-            std::string deviceStr(wstr.begin(), wstr.end()); // Convert WideString to std::string
-
-            // Get device type
-            if (SetupDiGetDeviceRegistryPropertyW(hDevInfo, &DeviceInfoData, SPDRP_CLASS, nullptr, (PBYTE)deviceType, sizeof(deviceType), nullptr)) {
-                std::wstring typeWstr(deviceType);
-                std::string typeStr(typeWstr.begin(), typeWstr.end());
-
-                std::cout << "✅ Found USB Device: " << deviceStr << " (Type: " << typeStr << ")" << std::endl;
-                deviceList.push_back({deviceStr, typeStr});
-            } else {
-                std::cout << "✅ Found USB Device: " << deviceStr << " (Type: Unknown)" << std::endl;
-                deviceList.push_back({deviceStr, "Unknown"});
-            }
+    // Get required size first
+    if (!SetupDiGetDeviceRegistryProperty(deviceInfoSet, &deviceInfoData, property, &dataType, nullptr, 0, &requiredSize)) {
+        if (GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+            std::cout << "Property retrieval failed or size is zero. Property: " << property << " Error: " << GetLastError() << std::endl;
+            return "Unknown";
         }
     }
 
-    SetupDiDestroyDeviceInfoList(hDevInfo);
-    return deviceList;
+    // Increase buffer size
+    DWORD bufferSize = std::max<DWORD>(requiredSize, 1024);  // Set minimum buffer size to 1024
+    std::vector<BYTE> buffer(bufferSize);
+
+    if (!SetupDiGetDeviceRegistryProperty(deviceInfoSet, &deviceInfoData, property, &dataType, buffer.data(), bufferSize, &requiredSize)) {
+        std::cout << "Failed to retrieve property. Property: " << property << " Error: " << GetLastError() << std::endl;
+        return "Unknown";
+    }
+
+    if (dataType == REG_SZ) {
+        // Convert WCHAR to string and trim trailing null characters
+        std::wstring wstr(reinterpret_cast<WCHAR*>(buffer.data()));
+        std::string result(wstr.begin(), wstr.end());
+        result.erase(std::find(result.begin(), result.end(), '\0'), result.end());  // Remove trailing null characters
+        std::cout << "Retrieved Property: " << result << " Property: " << property << std::endl;  // Debug output
+        return result;
+    } else {
+        std::cout << "Property is not a string. Property: " << property << " Data Type: " << dataType << std::endl;
+        return "Unknown";
+    }
+}
+
+std::vector<std::pair<std::string, std::string>> GetConnectedUSBDevices() {
+    std::vector<std::pair<std::string, std::string>> devices;
+
+    HDEVINFO deviceInfoSet = SetupDiGetClassDevs(nullptr, L"USB", nullptr, DIGCF_PRESENT | DIGCF_ALLCLASSES);  // Use wide-character string
+    if (deviceInfoSet == INVALID_HANDLE_VALUE) {
+        std::cout << "Error: Failed to get device info set." << std::endl;
+        return devices;
+    }
+
+    SP_DEVINFO_DATA deviceInfoData;
+    deviceInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
+
+    for (DWORD i = 0; SetupDiEnumDeviceInfo(deviceInfoSet, i, &deviceInfoData); i++) {
+        // Try Friendly Name first
+        std::string name = GetDeviceProperty(deviceInfoSet, deviceInfoData, SPDRP_FRIENDLYNAME);
+
+        if (name == "Unknown" || name.empty()) {
+            // Fallback to Device Description
+            name = GetDeviceProperty(deviceInfoSet, deviceInfoData, SPDRP_DEVICEDESC);
+        }
+
+        // Always check the type
+        std::string type = GetDeviceProperty(deviceInfoSet, deviceInfoData, SPDRP_CLASS);
+        if (type.empty()) type = "Unknown";
+
+        // Debug log the values
+        std::cout << "DEBUG: Device Name: [" << name << "] Type: [" << type << "]" << std::endl;
+
+        devices.push_back({name, type});
+    }
+
+    SetupDiDestroyDeviceInfoList(deviceInfoSet);
+    return devices;
 }

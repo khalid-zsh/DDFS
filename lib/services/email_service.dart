@@ -1,44 +1,37 @@
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class EmailService {
-  static const String apiEndpoint = "https://your-email-api.com/send";
-
   /// Sends a general email with subject & message
   static Future<void> sendEmail(String to, String subject, String message) async {
-    final response = await http.post(
-      Uri.parse(apiEndpoint),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "to": to,
-        "subject": subject,
-        "message": message,
-      }),
+    final Email email = Email(
+      body: message,
+      subject: subject,
+      recipients: [to],
+      isHTML: false,
     );
 
-    if (response.statusCode == 200) {
+    try {
+      await FlutterEmailSender.send(email);
       print("✅ Email Sent Successfully");
-    } else {
-      print("❌ Error Sending Email: ${response.body}");
+    } catch (error) {
+      print("❌ Error Sending Email: $error");
     }
   }
 
   /// Sends an email with TeamViewer access details when a device is connected
   static Future<void> sendTeamViewerAccess(String deviceType, String deviceId) async {
-    final response = await http.post(
-      Uri.parse(apiEndpoint),
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "to": "data.team@example.com", // Replace with actual extraction team email
-        "subject": "TeamViewer Access for $deviceType",
-        "message": "A new $deviceType is connected.\n\nDevice ID: $deviceId\nTeamViewer ID: XXXX\nPassword: YYYY",
-      }),
+    final Email email = Email(
+      body: "A new $deviceType is connected.\n\nDevice ID: $deviceId\nTeamViewer ID: XXXX\nPassword: YYYY",
+      subject: "TeamViewer Access for $deviceType",
+      recipients: ["data.team@example.com"], // Replace with actual extraction team email
+      isHTML: false,
     );
 
-    if (response.statusCode == 200) {
+    try {
+      await FlutterEmailSender.send(email);
       print("✅ TeamViewer Access Email Sent Successfully");
-    } else {
-      print("❌ Error Sending TeamViewer Access Email: ${response.body}");
+    } catch (error) {
+      print("❌ Error Sending TeamViewer Access Email: $error");
     }
   }
 }

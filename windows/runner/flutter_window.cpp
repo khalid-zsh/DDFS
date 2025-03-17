@@ -1,5 +1,7 @@
 #include "flutter_window.h"
+
 #include <optional>
+
 #include "flutter/generated_plugin_registrant.h"
 #include "flutter/dart_project.h"
 #include "flutter/flutter_view_controller.h"
@@ -7,55 +9,35 @@
 #include "flutter/standard_method_codec.h"
 #include <windows.h>
 #include "usb_detection.h"
+#include "teamviewer_plugin.h"
 
-// Function to register method channels
 void RegisterMethodChannels(flutter::FlutterEngine* engine) {
-    auto teamViewerChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-            engine->messenger(), "com.ddfs/teamviewer", &flutter::StandardMethodCodec::GetInstance());
-
-    teamViewerChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
-                                               std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-        if (call.method_name().compare("launchTeamViewer") == 0) {
-            HINSTANCE hInst = ShellExecute(0, L"open", L"C:\\Program Files (x86)\\TeamViewer\\TeamViewer.exe", nullptr, nullptr, SW_SHOW);
-            if (reinterpret_cast<intptr_t>(hInst) <= 32) {
-                result->Error("FAILED", "TeamViewer failed to launch.");
-            } else {
-                result->Success();
-            }
-        } else {
-            result->NotImplemented();
-        }
-    });
-
-    auto zoomChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
-            engine->messenger(), "com.ddfs/zoom", &flutter::StandardMethodCodec::GetInstance());
-
-    zoomChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
-                                         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
-        if (call.method_name().compare("launchZoom") == 0) {
-            ShellExecute(0, L"open", L"https://zoom.us/join", nullptr, nullptr, SW_SHOW);
-            result->Success();
-        } else {
-            result->NotImplemented();
-        }
-    });
-
     auto usbChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
             engine->messenger(), "com.ddfs/usb", &flutter::StandardMethodCodec::GetInstance());
 
     usbChannel->SetMethodCallHandler([](const flutter::MethodCall<flutter::EncodableValue>& call,
                                         std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result) {
         if (call.method_name().compare("getUSBDevices") == 0) {
-            std::vector<std::string> devices = GetConnectedUSBDevices();
+            std::vector<std::pair<std::string, std::string>> usbDevices = GetConnectedUSBDevices();
             std::vector<flutter::EncodableValue> resultList;
-            for (const auto& device : devices) {
-                resultList.push_back(flutter::EncodableValue(device));
+
+            for (const auto& device : usbDevices) {
+                flutter::EncodableMap deviceMap;
+                deviceMap[flutter::EncodableValue("name")] = flutter::EncodableValue(device.first);
+                deviceMap[flutter::EncodableValue("type")] = flutter::EncodableValue(device.second);
+                resultList.push_back(flutter::EncodableValue(deviceMap));
             }
+
             result->Success(flutter::EncodableValue(resultList));
         } else {
             result->NotImplemented();
         }
     });
+
+    // ✅ Corrected plugin registration using reinterpret_cast
+    TeamViewerPlugin::RegisterWithRegistrar(
+            reinterpret_cast<flutter::PluginRegistrarWindows*>(
+                    engine->GetRegistrarForPlugin("TeamViewerPlugin")));
 }
 
 FlutterWindow::FlutterWindow(const flutter::DartProject& project)
@@ -77,7 +59,6 @@ bool FlutterWindow::OnCreate() {
         return false;
     }
 
-    // Register plugins and method channels
     RegisterPlugins(flutter_controller_->engine());
     RegisterMethodChannels(flutter_controller_->engine());
 

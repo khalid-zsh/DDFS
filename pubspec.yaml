@@ -46,6 +46,7 @@ dependencies:
   archive: ^4.0.4
   google_fonts: ^6.2.1
   syncfusion_flutter_pdfviewer: ^28.2.11
+  flutter_email_sender: ^7.0.0
 
 dev_dependencies:
   flutter_test:

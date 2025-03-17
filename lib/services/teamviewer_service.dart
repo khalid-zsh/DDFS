@@ -1,10 +1,11 @@
+import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TeamViewerService {
   static const MethodChannel _channel = MethodChannel('com.ddfs/teamviewer');
-  static const String apiKey = "your-teamviewer-api-key"; // 🔴 Replace with real API key
+  static const String apiKey = "your-teamviewer-api-key";
 
   /// Launch TeamViewer
   static Future<void> launchTeamViewer() async {
@@ -18,19 +19,7 @@ class TeamViewerService {
   /// Activate TeamViewer Black Screen
   static Future<void> enableBlackScreen() async {
     try {
-      final response = await http.post(
-        Uri.parse("https://webapi.teamviewer.com/api/v1/sessions/enableBlackScreen"),
-        headers: {
-          "Authorization": "Bearer $apiKey",
-          "Content-Type": "application/json",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("✅ Black Screen Enabled Successfully");
-      } else {
-        print("❌ Failed to Enable Black Screen: ${response.body}");
-      }
+      Process.run('powershell', ['Start-Process', 'cmd.exe', '/c', 'windows/scripts/enable_black_screen.bat']);
     } catch (e) {
       print("❌ Error enabling Black Screen: $e");
     }
