@@ -40,13 +40,15 @@ dependencies:
   get: ^4.7.2
   webview_flutter: ^4.10.0
   shared_preferences: ^2.5.2
-  flutter_local_notifications: ^18.0.1
+  flutter_local_notifications: ^19.0.0
   mailer: ^6.4.1
   file_picker: ^9.1.0
   archive: ^4.0.4
   google_fonts: ^6.2.1
   syncfusion_flutter_pdfviewer: ^28.2.11
   flutter_email_sender: ^7.0.0
+  flutter_tawkto: ^0.0.5
+
 
 dev_dependencies:
   flutter_test:
@@ -73,22 +75,23 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/Logo/DDFS Logo 5.png
-    - assets/icon/account.png
-    - assets/icon/cloud.png
-    - assets/icon/info.png
-    - assets/icon/laptop.png
-    - assets/icon/laptop-computer.png
-    - assets/icon/notifications.png
-    - assets/icon/phone_iphone.png
-    - assets/icon/settings.png
-    - assets/icon/smartphone.png
+    - assets/icon/1.png
+    - assets/icon/2.png
+    - assets/icon/3.png
+    - assets/icon/4.png
+    - assets/icon/5.png
+    - assets/icon/6.png
+    - assets/icon/7.png
+    - assets/icon/8.png
+    - assets/icon/9.png
+    - assets/icon/10.png
+    - assets/icon/11.png
+    - assets/icon/12.png
+    - assets/icon/13.png
+    - assets/icon/14.png
+    - assets/icon/15.png
+    - assets/icon/16.png
     - assets/icon/smartwatch.png
-    - assets/icon/tablet.png
-    - assets/icon/tablet (1).png
-    - assets/icon/teleworking.png
-    - assets/icon/warning_20dp_E3E3E3_FILL0_wght400_GRAD0_opsz20.png
-    - assets/icon/watch.png
-    - assets/Logo/DDFS Logo 11.png
     - assets/pdf/Computer Settings.pdf
     - assets/pdf/Phone Settings.pdf
     - assets/pdf/Smart Watch Settings.pdf

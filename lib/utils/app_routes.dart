@@ -1,14 +1,12 @@
+import 'package:ddfs/services/settings_password_protection.dart';
 import 'package:get/get.dart';
 import '../views/home/home_page.dart';
-import '../views/home/settings_page.dart';
 import '../views/home/help_page.dart';
-import '../views/home/teamviewer_page.dart';
 
 class AppRoutes {
   static final routes = [
     GetPage(name: '/', page: () => const HomeScreen()),
-    GetPage(name: '/settings', page: () => const SettingsPage()),
+    GetPage(name: '/settings', page: () => SettingsPasswordProtection()),
     GetPage(name: '/help', page: () => const HelpPage()),
-    GetPage(name: '/teamviewer', page: () => const TeamViewerPage()),
   ];
 }

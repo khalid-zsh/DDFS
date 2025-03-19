@@ -1,7 +1,7 @@
+import 'package:ddfs/controllers/settings_controller.dart';
+import 'package:ddfs/utils/startup_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'controllers/settings_controller.dart';
-import 'utils/startup_manager.dart';
 
 class SettingsScreen extends StatelessWidget {
   final SettingsController settingsController = Get.find<SettingsController>();
@@ -14,18 +14,7 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text("Admin Settings")),
       body: ListView(
-        padding: const EdgeInsets.all(20),
         children: [
-          TextField(
-            decoration: const InputDecoration(labelText: "TeamViewer ID"),
-            controller: TextEditingController(text: settingsController.settings.value.teamViewerId),
-          ),
-          TextField(
-            decoration: const InputDecoration(labelText: "Zoom Link"),
-            controller: TextEditingController(text: settingsController.settings.value.zoomLink),
-          ),
-          const SizedBox(height: 10),
-
           Obx(() => SwitchListTile(
             title: const Text("Enable Auto-Start on Windows Boot"),
             value: autoStartEnabled.value,
@@ -38,7 +27,6 @@ class SettingsScreen extends StatelessWidget {
               autoStartEnabled.value = value;
             },
           )),
-
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {

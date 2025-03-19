@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:get/get.dart';
 import '../../services/email_service.dart';
-import '../../services/teamviewer_service.dart';
 import '../popups/loading_popup.dart';
 
-
 class ExtractionPage extends StatefulWidget {
-  final String deviceType;
-  final String deviceId;
+  final String unitId;
 
-  const ExtractionPage({super.key, required this.deviceType, required this.deviceId});
+  const ExtractionPage({super.key, required this.unitId});
 
   @override
   _ExtractionPageState createState() => _ExtractionPageState();
@@ -18,7 +15,7 @@ class ExtractionPage extends StatefulWidget {
 
 class _ExtractionPageState extends State<ExtractionPage> {
   String _getPdfPath() {
-    switch (widget.deviceType) {
+    switch (widget.unitId) {
       case "Mobile Phone":
         return "assets/pdf/Phone Settings.pdf";
       case "Tablet":
@@ -33,14 +30,8 @@ class _ExtractionPageState extends State<ExtractionPage> {
   }
 
   void _startDataExtraction() async {
-    // Send TeamViewer Access Email
-    await EmailService.sendTeamViewerAccess(widget.deviceType, widget.deviceId);
-
-    // Launch TeamViewer
-    await TeamViewerService.launchTeamViewer();
-
-    // Enable TeamViewer Black Screen
-    await TeamViewerService.enableBlackScreen();
+    // Send Unit ID to admin
+    await EmailService.sendUnitId(widget.unitId);
 
     // Lock the screen with a loading popup
     Get.to(() => const LoadingPopup());
@@ -49,7 +40,7 @@ class _ExtractionPageState extends State<ExtractionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("${widget.deviceType} Data Extraction")),
+      appBar: AppBar(title: Text("${widget.unitId} Data Extraction")),
       body: Column(
         children: [
           Expanded(
@@ -62,7 +53,7 @@ class _ExtractionPageState extends State<ExtractionPage> {
               backgroundColor: Colors.blue,
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             ),
-            child: const Text("Get Started", style: TextStyle(color: Colors.white, fontSize: 18)),
+            child: const Text("Start Now", style: TextStyle(color: Colors.white, fontSize: 18)),
           ),
           const SizedBox(height: 20),
         ],

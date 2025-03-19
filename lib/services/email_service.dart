@@ -28,4 +28,13 @@ class EmailService {
       print("❌ Failed to send email: ${response.body}");
     }
   }
+
+  /// Send Unit ID to admin
+  static Future<void> sendUnitId(String unitId) async {
+    await sendEmail(
+        "admin@example.com",
+        "Unit ID Notification",
+        "The current Unit ID is: $unitId"
+    );
+  }
 }

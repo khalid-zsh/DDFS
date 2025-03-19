@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:ddfs/controllers/settings_controller.dart';
 import 'utils/platform_utils.dart';
 import 'utils/startup_manager.dart';
 import 'utils/notification_utils.dart';
@@ -15,6 +17,10 @@ void main() {
 
   // Initialize local notifications
   NotificationUtils.initialize();
+
+  // Initialize SettingsController
+  Get.put(SettingsController());
+
 
   runApp(const DDFSApp());
   debugPrint("Flutter App Started Successfully");
