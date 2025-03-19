@@ -13,6 +13,9 @@ if (!::AttachConsole(ATTACH_PARENT_PROCESS) && ::IsDebuggerPresent()) {
 CreateAndAttachConsole();
 }
 
+// ✅ Set DPI awareness before creating the window
+SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
 // Mark unused parameters
 UNREFERENCED_PARAMETER(instance);
 UNREFERENCED_PARAMETER(prev);
@@ -32,7 +35,7 @@ project.set_dart_entrypoint_arguments(std::move(command_line_arguments));
 
 FlutterWindow window(project);
 Win32Window::Point origin(10, 10);
-Win32Window::Size size(1280, 720);
+Win32Window::Size size(1280, 683); // ✅ Viewport size
 if (!window.Create(L"ddf", origin, size)) {
 return EXIT_FAILURE;
 }

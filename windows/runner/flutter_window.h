@@ -17,6 +17,8 @@ public:
     explicit FlutterWindow(const flutter::DartProject& project);
     virtual ~FlutterWindow();
 
+    void EnableFullScreen();
+
 protected:
     bool OnCreate() override;
     void OnDestroy() override;

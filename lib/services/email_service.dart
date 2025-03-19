@@ -1,50 +1,31 @@
-import 'package:flutter/services.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class EmailService {
-  static const MethodChannel _teamViewerChannel = MethodChannel('com.ddfs/teamviewer');
+  static const String apiKey = "e36118cf4ea5786f3365950a07dabdd8-3d4b3a2a-93db4ef4";
+  static const String domain = "sandbox4c2278c2529a44b9b11308205bae3638.mailgun.org";
+  static const String smtpUser = "postmaster@$domain";
 
-  /// Sends a general email with subject & message
+  /// Send email using Mailgun API
   static Future<void> sendEmail(String to, String subject, String message) async {
-    final Email email = Email(
-      body: message,
-      subject: subject,
-      recipients: [to],
-      isHTML: false,
+    final response = await http.post(
+      Uri.parse("https://api.mailgun.net/v3/$domain/messages"),
+      headers: {
+        "Authorization": "Basic " + base64Encode(utf8.encode("api:$apiKey")),
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: {
+        "from": "DDFS System <$smtpUser>",
+        "to": to,
+        "subject": subject,
+        "text": message,
+      },
     );
 
-    try {
-      await FlutterEmailSender.send(email);
-      print("✅ Email Sent Successfully");
-    } catch (error) {
-      print("❌ Error Sending Email: $error");
-    }
-  }
-
-  /// Sends an email with TeamViewer access details when a device is connected
-  static Future<void> sendTeamViewerAccess(String deviceName, String deviceId) async {
-    final Email email = Email(
-      body: "A new $deviceName is connected.\n\nDevice ID: $deviceId\nTeamViewer ID: XXXX\nPassword: YYYY",
-      subject: "TeamViewer Access for $deviceName",
-      recipients: ["eyeshotkhalid@gmail.com"],
-      isHTML: false,
-    );
-
-    try {
-      await FlutterEmailSender.send(email);
-      print("✅ TeamViewer Access Email Sent Successfully");
-    } catch (error) {
-      print("❌ Error Sending TeamViewer Access Email: $error");
-    }
-  }
-
-  /// Launches TeamViewer
-  static Future<void> launchTeamViewer() async {
-    try {
-      await _teamViewerChannel.invokeMethod('launchTeamViewer');
-      print("✅ TeamViewer Launched Successfully");
-    } catch (error) {
-      print("❌ Error Launching TeamViewer: $error");
+    if (response.statusCode == 200) {
+      print("✅ Email sent successfully!");
+    } else {
+      print("❌ Failed to send email: ${response.body}");
     }
   }
 }

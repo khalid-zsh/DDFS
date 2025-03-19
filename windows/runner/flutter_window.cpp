@@ -7,7 +7,7 @@
 #include "flutter/standard_method_codec.h"
 #include <windows.h>
 #include "usb_detection.h"
-#include "teamviewer_plugin.h"  // Include the header file here
+#include "teamviewer_plugin.h"
 
 void RegisterMethodChannels(flutter::FlutterEngine* engine) {
     auto usbChannel = std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
@@ -56,10 +56,20 @@ bool FlutterWindow::OnCreate() {
         return false;
     }
 
-    RECT frame = GetClientArea();
+    // ✅ Set windowed mode size: 1280 × 683
+    const int windowWidth = 1280;
+    const int windowHeight = 683;
+
+    // ✅ Get screen resolution
+    const int screenWidth = GetSystemMetrics(SM_CXSCREEN);
+    const int screenHeight = GetSystemMetrics(SM_CYSCREEN);
+
+    // ✅ Center the window
+    int posX = (screenWidth - windowWidth) / 2;
+    int posY = (screenHeight - windowHeight) / 2;
 
     flutter_controller_ = std::make_unique<flutter::FlutterViewController>(
-            frame.right - frame.left, frame.bottom - frame.top, project_);
+            windowWidth, windowHeight, project_);
 
     if (!flutter_controller_->engine() || !flutter_controller_->view()) {
         return false;
@@ -68,7 +78,17 @@ bool FlutterWindow::OnCreate() {
     RegisterPlugins(flutter_controller_->engine());
     RegisterMethodChannels(flutter_controller_->engine());
 
-    SetChildContent(flutter_controller_->view()->GetNativeWindow());
+
+    HWND flutterWindowHandle = flutter_controller_->view()->GetNativeWindow();  // ✅ Get handle
+    if (flutterWindowHandle) {
+        SetChildContent(flutterWindowHandle);
+    } else {
+        std::cerr << "❌ Failed to attach Flutter view!" << std::endl;
+        return false;
+    }
+
+    // ✅ Set initial window position
+    SetWindowPos(GetHandle(), HWND_TOP, posX, posY, windowWidth, windowHeight, SWP_NOZORDER | SWP_FRAMECHANGED);
 
     flutter_controller_->engine()->SetNextFrameCallback([&]() {
         this->Show();
@@ -76,7 +96,31 @@ bool FlutterWindow::OnCreate() {
 
     flutter_controller_->ForceRedraw();
 
+    EnableFullScreen(); // Ensure EnableFullScreen() is called after setup
+
     return true;
+}
+
+void FlutterWindow::EnableFullScreen() {
+    HWND hwnd = GetHandle(); // ✅ Get window handle
+
+    if (hwnd) {
+        // ✅ Remove window decorations and make it fixed-size
+        SetWindowLong(hwnd, GWL_STYLE, GetWindowLong(hwnd, GWL_STYLE) & ~WS_OVERLAPPEDWINDOW);
+
+        // ✅ Set fixed full-screen size: 1280 × 800
+        int posX = (GetSystemMetrics(SM_CXSCREEN) - 1280) / 2;
+        int posY = (GetSystemMetrics(SM_CYSCREEN) - 800) / 2;
+        SetWindowPos(hwnd, HWND_TOP, posX, posY, 1280, 800, SWP_NOZORDER | SWP_FRAMECHANGED);
+
+        ShowWindow(hwnd, SW_MAXIMIZE);// Force full-screen mode
+        SetForegroundWindow(hwnd);
+        SetFocus(hwnd);
+
+        std::cout << "✅ Full-screen mode set to 1280 × 800" << std::endl;
+    } else {
+        std::cout << "❌ Failed to get window handle" << std::endl;
+    }
 }
 
 void FlutterWindow::OnDestroy() {

@@ -6,19 +6,18 @@ class PlatformUtils {
   /// Forces full-screen mode (removes Windows UI)
   static void setFullScreen() {
     if (Platform.isWindows) {
-      final hwnd = GetForegroundWindow(); // Get the active window handle
+      final hwnd = GetForegroundWindow(); // Get active window handle
 
       if (hwnd != 0) {
-        // Remove the window border (Set Borderless Fullscreen)
+        // Remove window border (Set Borderless Fullscreen)
         SetWindowLongPtr(hwnd, GWL_STYLE, GetWindowLongPtr(hwnd, GWL_STYLE) & ~WS_OVERLAPPEDWINDOW);
 
         // Get screen dimensions
         final int screenWidth = GetSystemMetrics(SM_CXSCREEN);
         final int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
-        // Move and resize the window to full screen
+        // Move and resize window to full screen
         SetWindowPos(hwnd, NULL, 0, 0, screenWidth, screenHeight, SWP_NOZORDER | SWP_FRAMECHANGED);
-
         print("✅ App set to full-screen mode.");
       } else {
         print("❌ Failed to get window handle.");

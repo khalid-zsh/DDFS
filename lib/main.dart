@@ -8,9 +8,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Setup full-screen mode
-
-  PlatformUtils.setFullScreen();
   PlatformUtils.disableCloseButton();
+  PlatformUtils.setFullScreen();
   // Enable auto-start at Windows boot
   StartupManager.enableAutoStart();
 
@@ -18,4 +17,5 @@ void main() {
   NotificationUtils.initialize();
 
   runApp(const DDFSApp());
+  debugPrint("Flutter App Started Successfully");
 }

@@ -5,8 +5,10 @@ class StartupManager {
 
   /// Schedules the app to start at user login using Windows Task Scheduler
   static void enableAutoStart() {
+    // Ensure the application path is correct
     String appPath = r"C:\Program Files\Corsive\DDFS\ddfs.exe";
 
+    // PowerShell script to create a scheduled task
     String command = '''
     \$taskName = "$taskName"
     \$appPath = "$appPath"
@@ -27,8 +29,18 @@ class StartupManager {
     }
     ''';
 
-    Process.runSync('powershell', ['-Command', command], runInShell: true);
-    print("✅ Auto-start enabled using Task Scheduler.");
+    try {
+      // Run PowerShell command to create scheduled task
+      ProcessResult result = Process.runSync('powershell', ['-Command', command], runInShell: true);
+
+      if (result.exitCode == 0) {
+        print("✅ Auto-start enabled using Task Scheduler.");
+      } else {
+        print("❌ Error creating scheduled task: ${result.stderr}");
+      }
+    } catch (e) {
+      print("❌ Failed to run PowerShell command: $e");
+    }
   }
 
   /// Removes the scheduled task if the user wants to disable auto-start
@@ -43,8 +55,18 @@ class StartupManager {
     }
     ''';
 
-    Process.runSync('powershell', ['-Command', command], runInShell: true);
-    print("✅ Auto-start disabled.");
+    try {
+      // Run PowerShell command to remove scheduled task
+      ProcessResult result = Process.runSync('powershell', ['-Command', command], runInShell: true);
+
+      if (result.exitCode == 0) {
+        print("✅ Auto-start disabled.");
+      } else {
+        print("❌ Error disabling scheduled task: ${result.stderr}");
+      }
+    } catch (e) {
+      print("❌ Failed to run PowerShell command: $e");
+    }
   }
 
   /// Checks if the auto-start task exists
@@ -60,7 +82,14 @@ class StartupManager {
     }
     ''';
 
-    ProcessResult result = Process.runSync('powershell', ['-Command', command], runInShell: true);
-    return result.exitCode == 0;
+    try {
+      // Run PowerShell command to check if task exists
+      ProcessResult result = Process.runSync('powershell', ['-Command', command], runInShell: true);
+
+      return result.exitCode == 0;
+    } catch (e) {
+      print("❌ Failed to run PowerShell command: $e");
+      return false;
+    }
   }
 }
