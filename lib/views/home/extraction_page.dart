@@ -2,6 +2,7 @@ import 'package:ddfs/views/home/home_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:get/get.dart';
+import 'package:ddfs/controllers/settings_controller.dart';
 
 class ExtractionPage extends StatefulWidget {
   final String appbarName;
@@ -13,6 +14,8 @@ class ExtractionPage extends StatefulWidget {
 }
 
 class _ExtractionPageState extends State<ExtractionPage> {
+  final SettingsController _settingsController = Get.find<SettingsController>();
+
   String _getPdfPath() {
     switch (widget.appbarName) {
       case "Mobile Phone":
@@ -27,7 +30,8 @@ class _ExtractionPageState extends State<ExtractionPage> {
   }
 
   void _startDataExtraction() async {
-    // Send Unit ID to admin
+    // Send current Unit ID to admin
+    _settingsController.updateUnitId(_settingsController.settings.value.unitId);
 
     Get.to(() => const HomePage2());
   }

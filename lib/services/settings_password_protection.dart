@@ -1,7 +1,7 @@
+import 'package:ddfs/controllers/settings_controller.dart' as controller;
 import 'package:ddfs/views/home/settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/settings_controller.dart';
 import 'package:flutter/services.dart';
 
 class SettingsPasswordProtection extends StatefulWidget {
@@ -13,7 +13,7 @@ class SettingsPasswordProtection extends StatefulWidget {
 
 class _SettingsPasswordProtectionState extends State<SettingsPasswordProtection> {
   final TextEditingController _passwordController = TextEditingController();
-  final SettingsController _settingsController = Get.find<SettingsController>();
+  final controller.SettingsController _settingsController = Get.find<controller.SettingsController>();
 
   void _verifyPassword() {
     if (_settingsController.verifyAdminPassword(_passwordController.text)) {
@@ -24,7 +24,6 @@ class _SettingsPasswordProtectionState extends State<SettingsPasswordProtection>
       Get.snackbar("Error", "Incorrect Password", backgroundColor: Colors.red);
     }
   }
-
 
   void _handleKeyPress(KeyEvent event) {
     if (event is KeyDownEvent) {
@@ -56,7 +55,10 @@ class _SettingsPasswordProtectionState extends State<SettingsPasswordProtection>
                 child: TextField(
                   controller: _passwordController,
                   obscureText: true,
-                  decoration: const InputDecoration(labelText: "Password"),
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

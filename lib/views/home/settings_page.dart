@@ -1,7 +1,9 @@
 import 'package:ddfs/controllers/settings_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
+
 
 class SettingsPage extends StatelessWidget {
   final SettingsController _settingsController = Get.find<SettingsController>();
@@ -9,11 +11,12 @@ class SettingsPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController unitIdController = TextEditingController();
+  final TextEditingController appointmentUrlController = TextEditingController();
 
   RxString pdfPath1 = ''.obs;
   RxString pdfPath2 = ''.obs;
   RxString pdfPath3 = ''.obs;
-  RxString pdfPath4 = ''.obs;
+  RxString termsPdfPath = ''.obs;
 
   SettingsPage({super.key});
 
@@ -62,9 +65,16 @@ class SettingsPage extends StatelessWidget {
                 _buildSectionTitle("Upload PDFs"),
                 _buildFileUploadField("Mobile Data Extraction PDF", pdfPath1),
                 _buildFileUploadField("Tablet Data Extraction PDF", pdfPath2),
-                _buildFileUploadField("Smart Watch Data Extraction PDF", pdfPath3),
-                _buildFileUploadField("PC or Mac Data Extraction PDF", pdfPath4),
+                _buildFileUploadField("PC or Mac Data Extraction PDF", pdfPath3),
                 _buildSaveButton("Save PDFs", () => Get.snackbar("Success", "PDFs Updated", backgroundColor: Colors.green)),
+
+                _buildSectionTitle("Terms & Conditions PDF"),
+                _buildFileUploadField("Terms & Conditions PDF", termsPdfPath),
+                _buildSaveButton("Save Terms & Conditions PDF", () => Get.snackbar("Success", "Terms & Conditions PDF Updated", backgroundColor: Colors.green)),
+
+                _buildSectionTitle("Appointment URL Change"),
+                _buildTextField(appointmentUrlController, "New Appointment URL", Icons.link),
+                _buildSaveButton("Save Appointment URL", () => Get.snackbar("Success", "Appointment URL Updated", backgroundColor: Colors.green)),
               ],
             ),
           ),

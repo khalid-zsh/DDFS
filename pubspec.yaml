@@ -93,6 +93,7 @@ flutter:
     - assets/icon/15.png
     - assets/icon/16.png
     - assets/icon/smartwatch.png
+    - assets/warning/warning_strip.png
     - assets/pdf/Computer Settings.pdf
     - assets/pdf/Phone Settings.pdf
     - assets/pdf/Smart Watch Settings.pdf

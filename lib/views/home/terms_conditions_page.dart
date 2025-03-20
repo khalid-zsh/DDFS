@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:ddfs/controllers/settings_controller.dart';
 
 class TermsConditionsPage extends StatelessWidget {
   final Widget? nextPage;
@@ -23,12 +24,17 @@ class TermsConditionsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingsController _settingsController = Get.find<SettingsController>();
+
     return Scaffold(
       appBar: AppBar(title: const Text('Terms and Conditions')),
       body: Column(
         children: [
           Expanded(
-            child: SfPdfViewer.asset('assets/pdf/DDFS CONCENT FORM DRAFT MATCH 2025 V1.pdf'),
+            child: Obx(() {
+              final termsPdfPath = _settingsController.settings.value.termsPdfPath;
+              return SfPdfViewer.asset(termsPdfPath.isEmpty ? 'assets/pdf/DDFS CONCENT FORM DRAFT MATCH 2025 V1.pdf' : termsPdfPath);
+            }),
           ),
           if (showButtons)
             Row(
