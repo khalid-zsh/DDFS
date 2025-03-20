@@ -7,6 +7,8 @@ class RemoteSupportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EmailService emailService = EmailService();
+
     return Scaffold(
       appBar: AppBar(title: const Text("Remote Support")),
       body: Center(
@@ -16,7 +18,7 @@ class RemoteSupportScreen extends StatelessWidget {
             const Text("A support assistant will join shortly."),
             ElevatedButton(
               onPressed: () {
-                EmailService.sendEmail(
+                emailService.sendEmail(
                     "support@ddfs.com",
                     "Remote Support Requested",
                     "User requested remote support."

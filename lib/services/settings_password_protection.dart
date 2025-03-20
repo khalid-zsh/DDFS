@@ -13,12 +13,18 @@ class SettingsPasswordProtection extends StatefulWidget {
 
 class _SettingsPasswordProtectionState extends State<SettingsPasswordProtection> {
   final TextEditingController _passwordController = TextEditingController();
-  final controller.SettingsController _settingsController = Get.find<controller.SettingsController>();
+  late final controller.SettingsController _settingsController;
+
+  @override
+  void initState() {
+    super.initState();
+    _settingsController = Get.find<controller.SettingsController>();
+  }
 
   void _verifyPassword() {
     if (_settingsController.verifyAdminPassword(_passwordController.text)) {
       _passwordController.clear();
-      Get.off(() => SettingsPage());
+      Get.off(() => const SettingsPage());
     } else {
       _passwordController.clear();
       Get.snackbar("Error", "Incorrect Password", backgroundColor: Colors.red);

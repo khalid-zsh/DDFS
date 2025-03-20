@@ -15,12 +15,15 @@ class TermsConditionsPage extends StatelessWidget {
     if (termsKey != null) {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(termsKey!, true);
+      print('Terms accepted for $termsKey');
     }
+
     if (nextPage != null) {
-      // Use Get.off to remove the TermsConditionsPage from the navigation stack
+      print('Navigating to ExtractionPage');
       Get.off(() => nextPage!);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

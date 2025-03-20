@@ -1,3 +1,4 @@
+import 'package:ddfs/controllers/settings_controller.dart';
 import 'package:ddfs/services/settings_password_protection.dart';
 import 'package:ddfs/views/home/calendly_page.dart';
 import 'package:ddfs/views/home/chatbot_page.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String unitId = "D D F S _ R D C U _ 0 0 0 3"; // Default Unit ID
+  final SettingsController _settingsController = Get.find<SettingsController>();
 
   final List<Map<String, dynamic>> service = [
     {'icon': 'assets/icon/7.png', 'title': 'Mobile\nData Extraction', 'page': ExtractionPage(appbarName: "Mobile Phone"), 'termsKey': 'accepted_terms_mobile'},
@@ -38,11 +39,15 @@ class _HomeScreenState extends State<HomeScreen> {
     if (page is ExtractionPage && termsKey != null) {
       final prefs = await SharedPreferences.getInstance();
       final acceptedTerms = prefs.getBool(termsKey) ?? false;
+      print('Checking terms for $termsKey: $acceptedTerms'); // Debugging
+
       if (!acceptedTerms) {
+        print('Redirecting to TermsConditionsPage for $termsKey');
         Get.to(() => TermsConditionsPage(nextPage: page, termsKey: termsKey));
         return;
       }
     }
+    print('Navigating directly to ${page.runtimeType}');
     Get.to(() => page);
   }
 
@@ -52,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(
+        title: const Text(
           'D D F S   D A T A  E X T R A C T I O N   H U B',
           style: TextStyle(
               fontFamily: 'Font-2',
@@ -133,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       GridView.builder(
                         shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 5,
                           childAspectRatio: 0.7,
                           crossAxisSpacing: 80,
@@ -144,7 +149,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                       const SizedBox(height: 80),
-
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -157,10 +161,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                             ),
                           ),
-                          SizedBox(width: 80),
+                          const SizedBox(width: 80),
                           Column(
                             children: [
-                              Text(
+                              const Text(
                                 'R E M O T E  D A T A  C O L L E C T I O N  U N I T',
                                 style: TextStyle(
                                   fontFamily: '',
@@ -170,14 +174,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              Text('U N I T  I D : $unitId',
-                                  style: TextStyle(
+                              Obx(() => Text('U N I T  I D : ${_settingsController.settings.value.unitId}',
+                                  style: const TextStyle(
                                     fontFamily: '',
                                     color: Colors.white,
                                     fontSize: 20,
-                                  )),
+                                  ))),
                               const SizedBox(height: 5),
-                              Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
+                              const Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
                                   style: TextStyle(
                                     fontFamily: '',
                                     color: Colors.white,
@@ -185,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )),
                             ],
                           ),
-                          SizedBox(width: 80),
+                          const SizedBox(width: 80),
                           GestureDetector(
                             onTap: () => showChatDialog(context),
                             child: Image.asset(
@@ -211,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Colors.blue,
               padding: const EdgeInsets.all(2.7),
               alignment: Alignment.center,
-              child: Text(
+              child: const Text(
                 'Copyright © 2025 DDFS. All rights reserved.',
                 style: TextStyle(
                     fontFamily: 'CustomFont',
@@ -238,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: onTap,
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'Font-3',
           color: Colors.white,
           fontSize: 20,
@@ -249,7 +253,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildServiceCard(BuildContext context, int index) {
     return Container(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minHeight: 250, // Set minimum height
         minWidth: 150, // Set minimum width
         maxHeight: 350, // Set maximum height

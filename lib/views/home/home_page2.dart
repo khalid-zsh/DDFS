@@ -1,3 +1,4 @@
+import 'package:ddfs/controllers/settings_controller.dart';
 import 'package:ddfs/services/settings_password_protection.dart';
 import 'package:ddfs/views/home/calendly_page.dart';
 import 'package:ddfs/views/home/empty_page.dart';
@@ -17,7 +18,7 @@ class HomePage2 extends StatefulWidget {
 }
 
 class _HomePage2State extends State<HomePage2> {
-  String unitId = "D D F S _ R D C U _ 0 0 0 3"; // Default Unit ID
+  final SettingsController _settingsController = Get.find<SettingsController>();
 
   final List<Map<String, dynamic>> service = [
     {'icon': 'assets/icon/7.png', 'title': 'Mobile\nData Extraction', 'page': ExtractionPage(appbarName: "Mobile Phone"), 'termsKey': 'accepted_terms_mobile'},
@@ -130,17 +131,16 @@ class _HomePage2State extends State<HomePage2> {
                             ),
                           ),
                           const SizedBox(height: 5),
-                          Image.asset('assets/warning/warning_strip.png'),
-                          const SizedBox(height: 5),
                           Text('PLEASE WAIT UNTIL THIS SCREEN DISAPPEARS',
                               style: TextStyle(
                                 fontFamily: '',
                                 color: Colors.white,
                                 fontSize: 20,
                               )),
+                          const SizedBox(height: 5),
+                          Image.asset('assets/warning/warning_strip.png',),
                         ],
                       ),
-                      const SizedBox(height: 80),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -157,12 +157,12 @@ class _HomePage2State extends State<HomePage2> {
                                 ),
                               ),
                               const SizedBox(height: 5),
-                              Text('U N I T  I D : $unitId',
+                              Obx(() => Text('U N I T  I D : ${_settingsController.settings.value.unitId}',
                                   style: TextStyle(
                                     fontFamily: '',
                                     color: Colors.white,
                                     fontSize: 20,
-                                  )),
+                                  ))),
                               const SizedBox(height: 5),
                               Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
                                   style: TextStyle(

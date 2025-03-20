@@ -19,11 +19,11 @@ class _ExtractionPageState extends State<ExtractionPage> {
   String _getPdfPath() {
     switch (widget.appbarName) {
       case "Mobile Phone":
-        return "assets/pdf/Phone Settings.pdf";
+        return _settingsController.settings.value.mobilePdfPath;
       case "Tablet":
-        return "assets/pdf/Tablet Settings.pdf";
+        return _settingsController.settings.value.tabletPdfPath;
       case "PC or Mac":
-        return "assets/pdf/Computer Settings.pdf";
+        return _settingsController.settings.value.pcMacPdfPath;
       default:
         return "";
     }

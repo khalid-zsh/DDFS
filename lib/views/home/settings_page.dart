@@ -4,21 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:file_picker/file_picker.dart';
 
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
-class SettingsPage extends StatelessWidget {
-  final SettingsController _settingsController = Get.find<SettingsController>();
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  late final SettingsController _settingsController;
+
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
+
   final TextEditingController confirmPasswordController = TextEditingController();
+
   final TextEditingController unitIdController = TextEditingController();
+
   final TextEditingController appointmentUrlController = TextEditingController();
 
   RxString pdfPath1 = ''.obs;
+
   RxString pdfPath2 = ''.obs;
+
   RxString pdfPath3 = ''.obs;
+
   RxString termsPdfPath = ''.obs;
 
-  SettingsPage({super.key});
+  @override
+  void initState() {
+    super.initState();
+    _settingsController = Get.find<SettingsController>();
+  }
 
   void _pickFile(RxString pdfPath) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
@@ -46,13 +64,18 @@ class SettingsPage extends StatelessWidget {
               children: [
                 _buildSectionTitle("Admin Settings"),
                 _buildTextField(emailController, "Change Email", Icons.email),
-                _buildSaveButton("Save Email", () => _settingsController.updateEmailSender(emailController.text)),
+                _buildSaveButton("Save Email", () {
+                  _settingsController.updateEmailSender(emailController.text);
+                  emailController.clear();
+                }),
 
                 _buildTextField(passwordController, "New Password", Icons.lock, obscureText: true),
                 _buildTextField(confirmPasswordController, "Confirm Password", Icons.lock, obscureText: true),
                 _buildSaveButton("Save Password", () {
                   if (passwordController.text == confirmPasswordController.text) {
                     _settingsController.updateAdminPassword(passwordController.text);
+                    passwordController.clear();
+                    confirmPasswordController.clear();
                     Get.snackbar("Success", "Password Updated", backgroundColor: Colors.green);
                   } else {
                     Get.snackbar("Error", "Passwords do not match", backgroundColor: Colors.red);
@@ -60,21 +83,40 @@ class SettingsPage extends StatelessWidget {
                 }),
 
                 _buildTextField(unitIdController, "Change Unit ID", Icons.vpn_key),
-                _buildSaveButton("Save Unit ID", () => _settingsController.updateUnitId(unitIdController.text)),
+                _buildSaveButton("Save Unit ID", () {
+                  _settingsController.updateUnitId(unitIdController.text);
+                  unitIdController.clear();
+                }),
 
                 _buildSectionTitle("Upload PDFs"),
                 _buildFileUploadField("Mobile Data Extraction PDF", pdfPath1),
                 _buildFileUploadField("Tablet Data Extraction PDF", pdfPath2),
                 _buildFileUploadField("PC or Mac Data Extraction PDF", pdfPath3),
-                _buildSaveButton("Save PDFs", () => Get.snackbar("Success", "PDFs Updated", backgroundColor: Colors.green)),
+                _buildSaveButton("Save PDFs", () {
+                  if (pdfPath1.isNotEmpty) _settingsController.updatePdfPath("Mobile Phone", pdfPath1.value);
+                  if (pdfPath2.isNotEmpty) _settingsController.updatePdfPath("Tablet", pdfPath2.value);
+                  if (pdfPath3.isNotEmpty) _settingsController.updatePdfPath("PC or Mac", pdfPath3.value);
+                  pdfPath1.value = '';
+                  pdfPath2.value = '';
+                  pdfPath3.value = '';
+                  Get.snackbar("Success", "PDFs Updated", backgroundColor: Colors.green);
+                }),
 
                 _buildSectionTitle("Terms & Conditions PDF"),
                 _buildFileUploadField("Terms & Conditions PDF", termsPdfPath),
-                _buildSaveButton("Save Terms & Conditions PDF", () => Get.snackbar("Success", "Terms & Conditions PDF Updated", backgroundColor: Colors.green)),
+                _buildSaveButton("Save Terms & Conditions PDF", () {
+                  if (termsPdfPath.isNotEmpty) _settingsController.updateTermsPdfPath(termsPdfPath.value);
+                  termsPdfPath.value = '';
+                  Get.snackbar("Success", "Terms & Conditions PDF Updated", backgroundColor: Colors.green);
+                }),
 
                 _buildSectionTitle("Appointment URL Change"),
                 _buildTextField(appointmentUrlController, "New Appointment URL", Icons.link),
-                _buildSaveButton("Save Appointment URL", () => Get.snackbar("Success", "Appointment URL Updated", backgroundColor: Colors.green)),
+                _buildSaveButton("Save Appointment URL", () {
+                  _settingsController.updateAppointmentUrl(appointmentUrlController.text);
+                  appointmentUrlController.clear();
+                  Get.snackbar("Success", "Appointment URL Updated", backgroundColor: Colors.green);
+                }),
               ],
             ),
           ),

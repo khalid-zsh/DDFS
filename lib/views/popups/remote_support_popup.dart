@@ -7,7 +7,9 @@ class RemoteSupportPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    EmailService.sendEmail(
+    final EmailService emailService = EmailService();
+
+    emailService.sendEmail(
         "support@ddfs.com",
         "Remote Support Requested",
         "A user has requested remote support. Please join the session."
