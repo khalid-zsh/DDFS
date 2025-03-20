@@ -1,13 +1,12 @@
+import 'package:ddfs/views/home/home_page2.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:get/get.dart';
-import '../../services/email_service.dart';
-import '../popups/loading_popup.dart';
 
 class ExtractionPage extends StatefulWidget {
-  final String unitId;
+  final String appbarName;
 
-  const ExtractionPage({super.key, required this.unitId});
+  const ExtractionPage({super.key, required this.appbarName});
 
   @override
   _ExtractionPageState createState() => _ExtractionPageState();
@@ -15,13 +14,11 @@ class ExtractionPage extends StatefulWidget {
 
 class _ExtractionPageState extends State<ExtractionPage> {
   String _getPdfPath() {
-    switch (widget.unitId) {
+    switch (widget.appbarName) {
       case "Mobile Phone":
         return "assets/pdf/Phone Settings.pdf";
       case "Tablet":
         return "assets/pdf/Tablet Settings.pdf";
-      case "Smart Watch":
-        return "assets/pdf/Smart Watch Settings.pdf";
       case "PC or Mac":
         return "assets/pdf/Computer Settings.pdf";
       default:
@@ -31,16 +28,14 @@ class _ExtractionPageState extends State<ExtractionPage> {
 
   void _startDataExtraction() async {
     // Send Unit ID to admin
-    await EmailService.sendUnitId(widget.unitId);
 
-    // Lock the screen with a loading popup
-    Get.to(() => const LoadingPopup());
+    Get.to(() => const HomePage2());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("${widget.unitId} Data Extraction")),
+      appBar: AppBar(title: Text("${widget.appbarName} Data Extraction")),
       body: Column(
         children: [
           Expanded(

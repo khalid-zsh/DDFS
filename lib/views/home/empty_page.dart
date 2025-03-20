@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EmtyPage extends StatelessWidget {
-  const EmtyPage({super.key});
+class EmptyPage extends StatelessWidget {
+  const EmptyPage({super.key});
+
 
   @override
   Widget build(BuildContext context) {

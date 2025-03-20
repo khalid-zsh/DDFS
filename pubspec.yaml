@@ -48,6 +48,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^28.2.11
   flutter_email_sender: ^7.0.0
   flutter_tawkto: ^0.0.5
+  flutter_inappwebview_windows: ^0.6.0
 
 
 dev_dependencies:
@@ -96,6 +97,7 @@ flutter:
     - assets/pdf/Phone Settings.pdf
     - assets/pdf/Smart Watch Settings.pdf
     - assets/pdf/Tablet Settings.pdf
+    - assets/pdf/DDFS CONCENT FORM DRAFT MATCH 2025 V1.pdf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

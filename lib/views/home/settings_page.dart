@@ -1,104 +1,125 @@
 import 'package:ddfs/controllers/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:file_picker/file_picker.dart';
 
 class SettingsPage extends StatelessWidget {
   final SettingsController _settingsController = Get.find<SettingsController>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController unitIdController = TextEditingController();
+
+  RxString pdfPath1 = ''.obs;
+  RxString pdfPath2 = ''.obs;
+  RxString pdfPath3 = ''.obs;
+  RxString pdfPath4 = ''.obs;
 
   SettingsPage({super.key});
 
+  void _pickFile(RxString pdfPath) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+    if (result != null) {
+      pdfPath.value = result.files.single.name;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController(text: _settingsController.settings.value.emailSender);
-    final TextEditingController passwordController = TextEditingController();
-    final TextEditingController unitIdController = TextEditingController();
-    final TextEditingController pdfController1 = TextEditingController();
-    final TextEditingController pdfController2 = TextEditingController();
-    final TextEditingController pdfController3 = TextEditingController();
-    final TextEditingController pdfController4 = TextEditingController();
-
     return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(title: const Text("System Admin Settings")),
-      body: Center(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            const Text("Admin settings panel", style: TextStyle(fontSize: 18)),
-            const SizedBox(height: 20),
-            TextField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: "Change Email"),
+      appBar: AppBar(
+        title: const Text("Admin Settings", style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: ListView(
+              children: [
+                _buildSectionTitle("Admin Settings"),
+                _buildTextField(emailController, "Change Email", Icons.email),
+                _buildSaveButton("Save Email", () => _settingsController.updateEmailSender(emailController.text)),
+
+                _buildTextField(passwordController, "New Password", Icons.lock, obscureText: true),
+                _buildTextField(confirmPasswordController, "Confirm Password", Icons.lock, obscureText: true),
+                _buildSaveButton("Save Password", () {
+                  if (passwordController.text == confirmPasswordController.text) {
+                    _settingsController.updateAdminPassword(passwordController.text);
+                    Get.snackbar("Success", "Password Updated", backgroundColor: Colors.green);
+                  } else {
+                    Get.snackbar("Error", "Passwords do not match", backgroundColor: Colors.red);
+                  }
+                }),
+
+                _buildTextField(unitIdController, "Change Unit ID", Icons.vpn_key),
+                _buildSaveButton("Save Unit ID", () => _settingsController.updateUnitId(unitIdController.text)),
+
+                _buildSectionTitle("Upload PDFs"),
+                _buildFileUploadField("Mobile Data Extraction PDF", pdfPath1),
+                _buildFileUploadField("Tablet Data Extraction PDF", pdfPath2),
+                _buildFileUploadField("Smart Watch Data Extraction PDF", pdfPath3),
+                _buildFileUploadField("PC or Mac Data Extraction PDF", pdfPath4),
+                _buildSaveButton("Save PDFs", () => Get.snackbar("Success", "PDFs Updated", backgroundColor: Colors.green)),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                _settingsController.updateEmailSender(emailController.text);
-                Get.snackbar("Success", "Email Updated", backgroundColor: Colors.green);
-              },
-              child: const Text("Save Email"),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: passwordController,
-              decoration: const InputDecoration(labelText: "Change Password"),
-              obscureText: true,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (passwordController.text.length >= 5 && passwordController.text.length <= 9) {
-                  _settingsController.updateAdminPassword(passwordController.text);
-                  Get.snackbar("Success", "Password Updated", backgroundColor: Colors.green);
-                } else {
-                  Get.snackbar("Error", "Password must be between 5 and 9 characters", backgroundColor: Colors.red);
-                }
-              },
-              child: const Text("Save Password"),
-            ),
-            const SizedBox(height: 20),
-            TextField(
-              controller: unitIdController,
-              decoration: const InputDecoration(labelText: "Change Unit ID"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                _settingsController.updateUnitId(unitIdController.text);
-                Get.snackbar("Success", "Unit ID Updated", backgroundColor: Colors.green);
-              },
-              child: const Text("Save Unit ID"),
-            ),
-            const SizedBox(height: 20),
-            const Text("Change PDF"),
-            TextField(
-              controller: pdfController1,
-              decoration: const InputDecoration(labelText: "Mobile Data Extraction PDF"),
-            ),
-            TextField(
-              controller: pdfController2,
-              decoration: const InputDecoration(labelText: "Tablet Data Extraction PDF"),
-            ),
-            TextField(
-              controller: pdfController3,
-              decoration: const InputDecoration(labelText: "Smart Watch Data Extraction PDF"),
-            ),
-            TextField(
-              controller: pdfController4,
-              decoration: const InputDecoration(labelText: "PC or Mac Data Extraction PDF"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Implement PDF update logic
-                Get.snackbar("Success", "PDFs Updated", backgroundColor: Colors.green);
-              },
-              child: const Text("Save PDFs"),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Get.back(),
-              child: const Text("Back to Home"),
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Text(title, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple)),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {bool obscureText = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextField(
+        controller: controller,
+        obscureText: obscureText,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.deepPurple),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSaveButton(String text, VoidCallback onPressed) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 10, bottom: 20),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.deepPurple,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          padding: const EdgeInsets.symmetric(vertical: 12),
+        ),
+        onPressed: onPressed,
+        child: Text(text, style: const TextStyle(fontSize: 16, color: Colors.white)),
+      ),
+    );
+  }
+
+  Widget _buildFileUploadField(String label, RxString filePath) {
+    return Obx(() => ListTile(
+      title: Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+      subtitle: Text(filePath.value.isEmpty ? "No file selected" : filePath.value, style: const TextStyle(color: Colors.grey)),
+      trailing: ElevatedButton.icon(
+        icon: const Icon(Icons.upload_file, color: Colors.white),
+        label: const Text("Upload", style: TextStyle(color: Colors.white)),
+        style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
+        onPressed: () => _pickFile(filePath),
+      ),
+    ));
   }
 }

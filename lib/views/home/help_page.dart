@@ -12,7 +12,7 @@ class HelpPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Live chat & support options", style: TextStyle(fontSize: 18)),
+            const Text("Live chat & support options HomePage2", style: TextStyle(fontSize: 18)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => Get.back(),
