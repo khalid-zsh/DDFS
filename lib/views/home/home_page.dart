@@ -145,81 +145,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                             ),
                             const SizedBox(height: 80),
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     Column(
-                            //       children: [
-                            //         GestureDetector(
-                            //           onTap: () => Get.to(() => const TermsConditionsPage(showButtons: false)),
-                            //           child: Column(
-                            //             children: [
-                            //               Image.asset(
-                            //                 'assets/icon/13.png',
-                            //                 color: Colors.blueAccent,
-                            //                 height: 100,
-                            //                 width: 100,
-                            //               ),
-                            //               const Text('Terms &\nConditions', style: TextStyle(color: Colors.white)),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //     Spacer(),
-                            //     Column(
-                            //       children: [
-                            //         const Text(
-                            //           'R E M O T E  D A T A  C O L L E C T I O N  U N I T',
-                            //           style: TextStyle(
-                            //             fontFamily: 'Font-1',
-                            //             color: Colors.white,
-                            //             fontSize: 30,
-                            //             letterSpacing: 2,
-                            //           ),
-                            //         ),
-                            //         const SizedBox(height: 5),
-                            //         Obx(() => Text('U N I T  I D : ${_settingsController.settings.value.unitId}',
-                            //             style: TextStyle(
-                            //               fontFamily: '',
-                            //               color: Colors.grey,
-                            //               fontSize: 20,
-                            //             ))),
-                            //         const SizedBox(height: 5),
-                            //         Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
-                            //             style: TextStyle(
-                            //               fontFamily: '',
-                            //               color: Colors.grey,
-                            //               fontSize: 20,
-                            //             )),
-                            //       ],
-                            //     ),
-                            //     Spacer(),
-                            //     Column(
-                            //       children: [
-                            //         GestureDetector(
-                            //           onTap: () => showChatDialog(context),
-                            //           child: Column(
-                            //             children: [
-                            //               Image.asset(
-                            //                 'assets/icon/12.png',
-                            //                 color: Colors.blueAccent,
-                            //                 height: 100,
-                            //                 width: 100,
-                            //               ),
-                            //               const Text('Click to chat', style: TextStyle(color: Colors.white)),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ],
-                            //     ),
-                            //   ],
-                            // ),
-
                           ],
                         ),
                       ),
                       Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
@@ -227,14 +157,18 @@ class _HomeScreenState extends State<HomeScreen> {
                               GestureDetector(
                                 onTap: () => Get.to(() => const TermsConditionsPage(showButtons: false)),
                                 child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  spacing: 0,
                                   children: [
                                     Image.asset(
                                       'assets/icon/13.png',
                                       color: Colors.blueAccent,
                                       height: 100,
                                       width: 100,
+                                      fit: BoxFit.cover,
                                     ),
-                                    const Text('Terms &\nConditions', style: TextStyle(color: Colors.white)),
+                                     Text('Terms &\nConditions', style: TextStyle(color: Colors.white)),
                                   ],
                                 ),
                               ),
