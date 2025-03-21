@@ -10,37 +10,45 @@ class EmailService {
     _settingsController = Get.find<SettingsController>();
   }
 
-  static const String apiKey = "e36118cf4ea5786f3365950a07dabdd8-3d4b3a2a-93db4ef4";
-  static const String domain = "sandbox4c2278c2529a44b9b11308205bae3638.mailgun.org";
-  static const String smtpUser = "postmaster@$domain";
+  static const String apiKey = "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";
+  static const String smtpServer = "smtp-relay.brevo.com";
+  static const int smtpPort = 587;
+  static const String smtpUser = "888af5003@smtp-brevo.com";
 
-  /// Send email using Mailgun API
+  /// Send email using Brevo API
   Future<void> sendEmail(String to, String subject, String message) async {
     final response = await http.post(
-      Uri.parse("https://api.mailgun.net/v3/$domain/messages"),
+      Uri.parse("https://api.brevo.com/v3/smtp/email"),
       headers: {
-        "Authorization": "Basic " + base64Encode(utf8.encode("api:$apiKey")),
-        "Content-Type": "application/x-www-form-urlencoded"
+        "api-key": apiKey,
+        "Content-Type": "application/json"
       },
-      body: {
-        "from": "${_settingsController.settings.value.emailSender} <$smtpUser>",
-        "to": to,
+      body: jsonEncode({
+        "sender": {
+          "name": _settingsController.settings.value.emailSender,
+          "email": smtpUser
+        },
+        "to": [
+          {
+            "email": to
+          }
+        ],
         "subject": subject,
-        "text": message,
-      },
+        "textContent": message,
+      }),
     );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       print("✅ Email sent successfully!");
     } else {
-      print("❌ Failed to send email: ${response.body}");
+      print("❌ Failed to send email: ${response.statusCode} ${response.body}");
     }
   }
 
   /// Send Unit ID to admin
   Future<void> sendUnitId(String unitId) async {
     await sendEmail(
-        "admin@example.com",
+        _settingsController.settings.value.adminEmail,
         "Unit ID Notification",
         "The current Unit ID is: $unitId"
     );

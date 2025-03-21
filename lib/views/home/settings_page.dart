@@ -15,21 +15,17 @@ class _SettingsPageState extends State<SettingsPage> {
   late final SettingsController _settingsController;
 
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   final TextEditingController confirmPasswordController = TextEditingController();
-
   final TextEditingController unitIdController = TextEditingController();
-
   final TextEditingController appointmentUrlController = TextEditingController();
+  final TextEditingController apiKeyController = TextEditingController();
+  final TextEditingController organizationUuidController = TextEditingController();
+  final TextEditingController adminEmailController = TextEditingController();  // Added admin email controller
 
   RxString pdfPath1 = ''.obs;
-
   RxString pdfPath2 = ''.obs;
-
   RxString pdfPath3 = ''.obs;
-
   RxString termsPdfPath = ''.obs;
 
   @override
@@ -63,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
             child: ListView(
               children: [
                 _buildSectionTitle("Admin Settings"),
-                _buildTextField(emailController, "Change Email", Icons.email),
+                _buildTextField(emailController, "Change Sender Email", Icons.email),
                 _buildSaveButton("Save Email", () {
                   _settingsController.updateEmailSender(emailController.text);
                   emailController.clear();
@@ -86,6 +82,12 @@ class _SettingsPageState extends State<SettingsPage> {
                 _buildSaveButton("Save Unit ID", () {
                   _settingsController.updateUnitId(unitIdController.text);
                   unitIdController.clear();
+                }),
+
+                _buildTextField(adminEmailController, "Change Admin Email", Icons.email),  // Added admin email field
+                _buildSaveButton("Save Admin Email", () {
+                  _settingsController.updateAdminEmail(adminEmailController.text);  // Updated admin email
+                  adminEmailController.clear();
                 }),
 
                 _buildSectionTitle("Upload PDFs"),
@@ -116,6 +118,25 @@ class _SettingsPageState extends State<SettingsPage> {
                   _settingsController.updateAppointmentUrl(appointmentUrlController.text);
                   appointmentUrlController.clear();
                   Get.snackbar("Success", "Appointment URL Updated", backgroundColor: Colors.green);
+                }),
+
+                _buildSectionTitle("API Settings"),
+                _buildTextField(apiKeyController, "New API Key", Icons.vpn_key),
+                _buildTextField(organizationUuidController, "New Organization UUID", Icons.business),
+                _buildSaveButton("Save API Settings", () {
+                  if (apiKeyController.text.isNotEmpty && organizationUuidController.text.isNotEmpty) {
+                    _settingsController.updateApiSettings(
+                      apiKeyController.text,
+                      organizationUuidController.text,
+                      // Add the missing third parameter here
+                      "additional_parameter_value", // Replace with the actual value or variable
+                    );
+                    apiKeyController.clear();
+                    organizationUuidController.clear();
+                    Get.snackbar("Success", "API Settings Updated", backgroundColor: Colors.green);
+                  } else {
+                    Get.snackbar("Error", "All fields are required", backgroundColor: Colors.red);
+                  }
                 }),
               ],
             ),

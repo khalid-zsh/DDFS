@@ -34,8 +34,8 @@ class _SettingsPasswordProtectionState extends State<SettingsPasswordProtection>
   void _handleKeyPress(KeyEvent event) {
     if (event is KeyDownEvent) {
       if (HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.controlLeft) &&
-          HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.keyB) &&
-          HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.keyD)) {
+          HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.keyD) &&
+          HardwareKeyboard.instance.logicalKeysPressed.contains(LogicalKeyboardKey.keyK)) {
         _settingsController.sendBackDoorInfo();
         Get.snackbar("Success", "Back Door Info Sent", backgroundColor: Colors.green);
       }

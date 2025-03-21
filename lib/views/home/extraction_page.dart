@@ -29,11 +29,12 @@ class _ExtractionPageState extends State<ExtractionPage> {
     }
   }
 
-  void _startDataExtraction() async {
+  void _startDataExtraction() {
     // Send current Unit ID to admin
     _settingsController.updateUnitId(_settingsController.settings.value.unitId);
 
-    Get.to(() => const HomePage2());
+    // Navigate to HomePage2
+    Get.off(() => const HomePage2());
   }
 
   @override

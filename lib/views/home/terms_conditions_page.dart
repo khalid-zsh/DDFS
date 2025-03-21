@@ -24,7 +24,6 @@ class TermsConditionsPage extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     final SettingsController _settingsController = Get.find<SettingsController>();
@@ -40,17 +39,26 @@ class TermsConditionsPage extends StatelessWidget {
             }),
           ),
           if (showButtons)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            Column(
               children: [
-                ElevatedButton(
-                  onPressed: () => _acceptTerms(context),
-                  child: const Text('Agree'),
+                SizedBox(height: 20), // Add space between PDF and buttons
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () => _acceptTerms(context),
+                        child: const Text('Agree'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () => Get.back(),
+                        child: const Text('Disagree'),
+                      ),
+                    ],
+                  ),
                 ),
-                ElevatedButton(
-                  onPressed: () => Get.back(),
-                  child: const Text('Disagree'),
-                ),
+                SizedBox(height: 20), // Add space below the buttons
               ],
             ),
         ],

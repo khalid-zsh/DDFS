@@ -6,7 +6,6 @@ import 'package:ddfs/views/home/empty_page.dart';
 import 'package:ddfs/views/home/extraction_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../home/device_list_page.dart';
 import '../home/logs_page.dart';
 import '../home/help_page.dart';
@@ -36,16 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _navigateToPage(BuildContext context, Widget page, String? termsKey) async {
-    if (page is ExtractionPage && termsKey != null) {
-      final prefs = await SharedPreferences.getInstance();
-      final acceptedTerms = prefs.getBool(termsKey) ?? false;
-      print('Checking terms for $termsKey: $acceptedTerms'); // Debugging
-
-      if (!acceptedTerms) {
-        print('Redirecting to TermsConditionsPage for $termsKey');
-        Get.to(() => TermsConditionsPage(nextPage: page, termsKey: termsKey));
-        return;
-      }
+    if (page is ExtractionPage) {
+      print('Redirecting to TermsConditionsPage for $termsKey');
+      Get.to(() => TermsConditionsPage(nextPage: page, termsKey: termsKey));
+      return;
     }
     print('Navigating directly to ${page.runtimeType}');
     Get.to(() => page);
@@ -56,11 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue,
         title: const Text(
           'D D F S   D A T A  E X T R A C T I O N   H U B',
           style: TextStyle(
-              fontFamily: 'Font-2',
+              fontFamily: 'Font-1',
               letterSpacing: 2,
               fontSize: 26
           ),
@@ -80,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Row(
                       children: [
-                        Image.asset('assets/Logo/DDFS Logo 5.png', height: 80),
+                        Image.asset('assets/Logo/DDFS Logo 5.png', height: 110),
                         const SizedBox(width: 20),
                         _menuItem("Menu", () => Get.to(() => const EmptyPage())),
                         _divider(),
@@ -100,9 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         GestureDetector(
                           onTap: () => Get.to(() => const LogsPage()),
-                          child: Image.asset('assets/icon/1.png', height: 50),
+                          child: Image.asset('assets/icon/1.png', height: 200),
                         ),
-                        const SizedBox(width: 10),
                         GestureDetector(
                           onTap: () => Get.to(() => const LogsPage()),
                           child: Image.asset('assets/icon/2.png', height: 50),
@@ -129,45 +122,131 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Center(
                 child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
+                  margin: const EdgeInsets.only(left: 30, top: 80, bottom: 20,right: 30),
                   width: MediaQuery.of(context).size.width * 0.9,
                   color: Colors.grey[850],
-                  padding: const EdgeInsets.all(20.0),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 5,
-                          childAspectRatio: 0.7,
-                          crossAxisSpacing: 80,
-                        ),
-                        itemCount: service.length,
-                        itemBuilder: (context, index) {
-                          return _buildServiceCard(context, index);
-                        },
-                      ),
-                      const SizedBox(height: 80),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () => Get.to(() => const TermsConditionsPage(showButtons: false)),
-                            child: Image.asset(
-                              'assets/icon/13.png',
-                              color: Colors.blueAccent,
-                              height: 100,
-                              width: 100,
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 5,
+                                childAspectRatio: 0.7,
+                                crossAxisSpacing: 80,
+                              ),
+                              itemCount: service.length,
+                              itemBuilder: (context, index) {
+                                return _buildServiceCard(context, index);
+                              },
                             ),
+                            const SizedBox(height: 80),
+                            // Row(
+                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //   children: [
+                            //     Column(
+                            //       children: [
+                            //         GestureDetector(
+                            //           onTap: () => Get.to(() => const TermsConditionsPage(showButtons: false)),
+                            //           child: Column(
+                            //             children: [
+                            //               Image.asset(
+                            //                 'assets/icon/13.png',
+                            //                 color: Colors.blueAccent,
+                            //                 height: 100,
+                            //                 width: 100,
+                            //               ),
+                            //               const Text('Terms &\nConditions', style: TextStyle(color: Colors.white)),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     Spacer(),
+                            //     Column(
+                            //       children: [
+                            //         const Text(
+                            //           'R E M O T E  D A T A  C O L L E C T I O N  U N I T',
+                            //           style: TextStyle(
+                            //             fontFamily: 'Font-1',
+                            //             color: Colors.white,
+                            //             fontSize: 30,
+                            //             letterSpacing: 2,
+                            //           ),
+                            //         ),
+                            //         const SizedBox(height: 5),
+                            //         Obx(() => Text('U N I T  I D : ${_settingsController.settings.value.unitId}',
+                            //             style: TextStyle(
+                            //               fontFamily: '',
+                            //               color: Colors.grey,
+                            //               fontSize: 20,
+                            //             ))),
+                            //         const SizedBox(height: 5),
+                            //         Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
+                            //             style: TextStyle(
+                            //               fontFamily: '',
+                            //               color: Colors.grey,
+                            //               fontSize: 20,
+                            //             )),
+                            //       ],
+                            //     ),
+                            //     Spacer(),
+                            //     Column(
+                            //       children: [
+                            //         GestureDetector(
+                            //           onTap: () => showChatDialog(context),
+                            //           child: Column(
+                            //             children: [
+                            //               Image.asset(
+                            //                 'assets/icon/12.png',
+                            //                 color: Colors.blueAccent,
+                            //                 height: 100,
+                            //                 width: 100,
+                            //               ),
+                            //               const Text('Click to chat', style: TextStyle(color: Colors.white)),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ],
+                            // ),
+
+                          ],
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () => Get.to(() => const TermsConditionsPage(showButtons: false)),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icon/13.png',
+                                      color: Colors.blueAccent,
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                    const Text('Terms &\nConditions', style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 80),
+                          Spacer(),
                           Column(
                             children: [
                               const Text(
                                 'R E M O T E  D A T A  C O L L E C T I O N  U N I T',
                                 style: TextStyle(
-                                  fontFamily: '',
+                                  fontFamily: 'Font-1',
                                   color: Colors.white,
                                   fontSize: 30,
                                   letterSpacing: 2,
@@ -175,29 +254,38 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               const SizedBox(height: 5),
                               Obx(() => Text('U N I T  I D : ${_settingsController.settings.value.unitId}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontFamily: '',
-                                    color: Colors.white,
+                                    color: Colors.grey,
                                     fontSize: 20,
                                   ))),
                               const SizedBox(height: 5),
-                              const Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
+                              Text('2 4 / 7   C U S T O M E R   S E R V I C E   8 7 7 . 4 7 1 . D D F S',
                                   style: TextStyle(
                                     fontFamily: '',
-                                    color: Colors.white,
+                                    color: Colors.grey,
                                     fontSize: 20,
                                   )),
                             ],
                           ),
-                          const SizedBox(width: 80),
-                          GestureDetector(
-                            onTap: () => showChatDialog(context),
-                            child: Image.asset(
-                              'assets/icon/12.png',
-                              color: Colors.blueAccent,
-                              height: 100,
-                              width: 100,
-                            ),
+                          Spacer(),
+                          Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () => showChatDialog(context),
+                                child: Column(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icon/12.png',
+                                      color: Colors.blueAccent,
+                                      height: 100,
+                                      width: 100,
+                                    ),
+                                    const Text('Click to chat', style: TextStyle(color: Colors.white)),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -231,9 +319,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _divider() {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: SizedBox(height: 20, width: 2, child: DecoratedBox(decoration: BoxDecoration(color: Colors.white))),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      child: SizedBox(height: 20, width: 2, child: DecoratedBox(decoration: BoxDecoration(color: Colors.grey))),
     );
   }
 
@@ -242,9 +330,8 @@ class _HomeScreenState extends State<HomeScreen> {
       onTap: onTap,
       child: Text(
         title,
-        style: const TextStyle(
-          fontFamily: 'Font-3',
-          color: Colors.white,
+        style: TextStyle(
+          color: Colors.grey,
           fontSize: 20,
         ),
       ),
@@ -271,9 +358,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Text(
             service[index]['title'],
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontFamily: 'Font-3',
-              color: Colors.white,
+              color: Colors.grey,
               fontSize: 18,
             ),
           ),
